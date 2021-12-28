@@ -5,18 +5,15 @@ const db = config.get("mongoURI") as string;
 
 export const connectToDB = async() => {
   try {
-    const obj: ConnectOptions = {
-      bufferCommands: false,
-      dbName: "test", 
-      user: "root", 
-      pass: "root", 
-      autoIndex: false,
-      autoCreate: true,
-    }
-    await mongoose.connect(
-        db,
-        obj, 
-        (error: CallbackError) => {
+    await mongoose.connect( 
+        db, {
+          bufferCommands: false,
+          dbName: process.env.DBNAME, 
+          user: process.env.USER, 
+          pass: process.env.PASS, 
+          autoIndex: false,
+          autoCreate: true,
+        }, (error: CallbackError) => {
         if (error){
           console.log(error);
         }
@@ -27,5 +24,3 @@ export const connectToDB = async() => {
     process.exit(1);
   }
 }
-
-//module.exports = connectToDB;

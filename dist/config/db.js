@@ -9,15 +9,14 @@ const config_1 = __importDefault(require("config"));
 const db = config_1.default.get("mongoURI");
 const connectToDB = async () => {
     try {
-        const obj = {
+        await mongoose_1.default.connect(db, {
             bufferCommands: false,
-            dbName: "test",
-            user: "root",
-            pass: "root",
+            dbName: process.env.DBNAME,
+            user: process.env.USER,
+            pass: process.env.PASS,
             autoIndex: false,
             autoCreate: true,
-        };
-        await mongoose_1.default.connect(db, obj, (error) => {
+        }, (error) => {
             if (error) {
                 console.log(error);
             }
@@ -30,4 +29,3 @@ const connectToDB = async () => {
     }
 };
 exports.connectToDB = connectToDB;
-//module.exports = connectToDB;
