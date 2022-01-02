@@ -1,13 +1,11 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 const Customer = require("../models/customer");
 const getCustomers = async (req, res) => {
-    const customers = await Customer.find({ status: 1 }).exec();
+    const customers = await Customer.find({ status: 1 });
     return res.status(200).json({
         ok: true,
         customers: customers.map((customer) => {
             return {
-                id: customer._id,
                 fullname: customer.fullname,
                 cellphone: customer.cellphone || "",
                 address: customer.address || "",
@@ -23,7 +21,6 @@ const registerCustomer = async (req, res) => {
             ok: true,
             message: "Cliente registrado exitosamente",
             customer: {
-                id: customer._id,
                 fullname: customer.fullname,
                 cellphone: customer.cellphone || "",
                 address: customer.address || "",
@@ -54,7 +51,6 @@ const updateCustomer = async (req, res) => {
             ok: true,
             message: "Cliente actualizado exitosamente",
             customer: {
-                id: customerUpdated._id,
                 fullname: customerUpdated.fullname,
                 cellphone: customerUpdated.cellphone || "",
                 address: customerUpdated.address || "",
