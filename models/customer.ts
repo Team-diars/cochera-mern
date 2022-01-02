@@ -18,6 +18,9 @@ const CustomerSchema: Schema = new Schema({
       model: String,
       licenceplate: String,
       color: String,
+      image: [
+        String
+      ]
     }
   ],
   date: {

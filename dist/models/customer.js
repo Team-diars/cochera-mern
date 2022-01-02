@@ -8,20 +8,11 @@ const CustomerSchema = new mongoose_1.Schema({
     },
     cellphone: {
         type: String,
-        required: true,
+        required: false,
     },
     address: {
         type: String,
-        required: true,
-    },
-    email: {
-        type: String,
-        unique: true,
-        require: true,
-    },
-    dni: {
-        type: String,
-        required: true,
+        required: false,
     },
     cars: [
         {
@@ -29,6 +20,9 @@ const CustomerSchema = new mongoose_1.Schema({
             model: String,
             licenceplate: String,
             color: String,
+            image: [
+                String
+            ]
         }
     ],
     date: {
@@ -40,4 +34,4 @@ const CustomerSchema = new mongoose_1.Schema({
         default: 1,
     },
 });
-module.exports = mongoose_1.model("customer", CustomerSchema);
+module.exports = (0, mongoose_1.model)("customer", CustomerSchema);
