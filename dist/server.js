@@ -9,7 +9,7 @@ const http_1 = __importDefault(require("http"));
 const db_1 = require("./config/db");
 const app = express_1.default();
 const server = http_1.default.createServer(app);
-const PORT = process.env.PORT || 6000;
+const PORT = process.env.PORT || 8000;
 db_1.connectToDB();
 server.listen(PORT, () => {
     console.log(`Server starting on port:  ${PORT}`);
