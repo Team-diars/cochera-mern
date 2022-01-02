@@ -21,7 +21,7 @@ export const CustomerScreen = () => {
           <Text fontSize="2xl"
                 fontWeight="bold"
                 lineHeight="short">
-            Garage Customers
+            Clientes
           </Text>
         </Box>
         <Button colorScheme="blue">

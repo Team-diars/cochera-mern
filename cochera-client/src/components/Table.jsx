@@ -32,12 +32,12 @@ export const CustomerTable = () => {
     <Table size='md' mt="10">
         <Thead>
           <Tr>
-            <Th>Name</Th>
-            <Th>Cellphone</Th>
-            <Th>Address</Th>
-            <Th>Registered Date</Th>
-            <Th>Cars</Th>
-            <Th>Actions</Th>
+            <Th>Nombre</Th>
+            <Th>Telefono</Th>
+            <Th>Direccion</Th>
+            <Th>Registrado</Th>
+            <Th>Autos</Th>
+            <Th>Acciones</Th>
           </Tr>
         </Thead>
         <Tbody>
@@ -55,7 +55,6 @@ export const CustomerTable = () => {
                       h={[4]}
                       w={[4]}
                       aria-label="See Cars"
-                      // d={{ base: "inline-flex", md: "none" }}
                     />
                   </Button>
                 </PopoverTrigger>
@@ -63,7 +62,7 @@ export const CustomerTable = () => {
                   <PopoverContent>
                     <PopoverArrow />
                     <PopoverHeader fontWeight="semibold">
-                      Cars
+                      Autos
                     </PopoverHeader>
                     <PopoverCloseButton />
                       <PopoverBody>
@@ -75,8 +74,6 @@ export const CustomerTable = () => {
                           <Badge
                             rounded="full"
                             px="2"
-                            // fontSize="sm"
-                            // colorScheme="teal"
                           >
                             DAR-231
                           </Badge>
