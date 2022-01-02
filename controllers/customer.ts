@@ -4,7 +4,13 @@ const getCustomers = async (req, res) => {
   const customers = await Customer.find({ status: 1 });
   return res.status(200).json({
     ok: true,
-    customers,
+    customers: customers.map((customer) => {
+      return {
+        fullname: customer.fullname,
+        cellphone: customer.cellphone || "",
+        address: customer.address || "",
+      };
+    }),
   });
 };
 
@@ -17,8 +23,8 @@ const registerCustomer = async (req, res) => {
       message: "Cliente registrado exitosamente",
       customer: {
         fullname: customer.fullname,
-        cellphone: customer.cellphone,
-        address: customer.address,
+        cellphone: customer.cellphone || "",
+        address: customer.address || "",
       },
     });
   } catch (error) {
@@ -47,8 +53,8 @@ const updateCustomer = async (req, res) => {
       message: "Cliente actualizado exitosamente",
       customer: {
         fullname: customerUpdated.fullname,
-        cellphone: customerUpdated.cellphone,
-        address: customerUpdated.address,
+        cellphone: customerUpdated.cellphone || "",
+        address: customerUpdated.address || "",
       },
     });
   } catch (error) {
