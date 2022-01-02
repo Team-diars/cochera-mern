@@ -6,20 +6,11 @@ const CustomerSchema: Schema = new Schema({
   },
   cellphone: {
     type: String,
-    required:true,
+    required:false,
   },
   address :{
     type: String,
-    required:true,
-  },
-  email: {
-    type: String,
-    unique: true,
-    require: true,
-  },
-  dni: {
-    type: String,
-    required: true,
+    required:false,
   },
   cars: [
     {
