@@ -8,9 +8,6 @@ export const connectToDB = async() => {
     await mongoose.connect( 
         db, {
           bufferCommands: false,
-          dbName: process.env.DBNAME, 
-          user: process.env.USER, 
-          pass: process.env.PASS, 
           autoIndex: false,
           autoCreate: true,
         }, (error: CallbackError) => {
