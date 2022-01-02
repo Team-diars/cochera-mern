@@ -4,11 +4,14 @@ const {
   getCustomers,
   registerCustomer,
   updateCustomer,
-  deleteCustomer
+  deleteCustomer,
 } = require("../controllers/customer");
 const { fieldValidation } = require("../middleware/field-validation");
+const { validateJWT } = require("../middleware/validate-jwt");
 
 const router = Router();
+
+router.use(validateJWT);
 
 router.get("/", getCustomers);
 
@@ -28,20 +31,14 @@ router.post(
 
 router.put(
   "/edit",
-  [
-    check("id", "El id es requerido").not().isEmpty(),
-    fieldValidation,
-  ],
+  [check("id", "El id es requerido").not().isEmpty(), fieldValidation],
   updateCustomer
 );
 
 router.delete(
-    "/delete",
-    [
-      check("id", "El id es requerido").not().isEmpty(),
-      fieldValidation,
-    ],
-    deleteCustomer
-  );
+  "/delete",
+  [check("id", "El id es requerido").not().isEmpty(), fieldValidation],
+  deleteCustomer
+);
 
 module.exports = router;
