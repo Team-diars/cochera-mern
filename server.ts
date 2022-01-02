@@ -5,7 +5,7 @@ import {connectToDB} from './config/db'
 const app = express();
 
 const server = http.createServer(app);
-const PORT = process.env.PORT || 6000;
+const PORT = process.env.PORT || 8000;
 
 connectToDB();
 
@@ -13,3 +13,7 @@ server.listen(PORT, () => {
   console.log(`Server starting on port:  ${PORT}`);
 })
 app.use(cors());
+
+app.use(express.json());
+
+app.use("/customer", require("./routes/customer"));
