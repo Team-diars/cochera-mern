@@ -12,8 +12,9 @@ import {
   FiX,
   FiXCircle,
 } from "react-icons/fi";
+import { connect } from 'react-redux';
 import { CustomerTable } from './Table';
-export const CustomerScreen = () => {
+export const CustomerScreen: React.FC = () => {
   return (
     <Container maxW='container.xl' padding="10">
       <Box display="flex" justifyContent="space-between" alignItems="center">
@@ -33,4 +34,5 @@ export const CustomerScreen = () => {
     </Container>
   )
 }
-export default CustomerScreen;
+
+export default connect()(CustomerScreen);

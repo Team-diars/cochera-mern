@@ -5,6 +5,7 @@ import { FiEdit, FiEye, FiMoreVertical, FiXCircle } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import { Button, IconButton } from '@chakra-ui/button';
 import { Portal, forwardRef, Icon, Popover, PopoverCloseButton, PopoverHeader, PopoverTrigger, Badge, Text, Box, PopoverContent, PopoverArrow, PopoverBody } from '@chakra-ui/react';
+import { CustomerState } from '../state/actions/customer';
 
 export const ActionsButton = forwardRef(({ label, ...rest }, ref) => {
   return (

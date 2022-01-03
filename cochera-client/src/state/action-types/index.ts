@@ -1,5 +1,6 @@
 export enum ActionType {
   RETRIEVE = 'RETRIEVE',
+  RETRIEVE_ERROR = 'RETRIEVE_ERROR',
   ADD = 'ADD',
   ADD_ERROR = 'ADD_ERROR',
   EDIT = 'EDIT',
