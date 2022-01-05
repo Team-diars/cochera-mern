@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Table, TableCaption, Tbody, Td, Tfoot, Th, Thead, Tr } from '@chakra-ui/table';
 import { Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/menu';
 import { FiEdit, FiEye, FiMoreVertical, FiXCircle } from 'react-icons/fi';
@@ -32,7 +32,7 @@ export const ActionsButton = forwardRef(({ label, ...rest }, ref) => {
 });
 
 export const CustomerTable = () => {
-  const data: CustomerState = useSelector((state: RootState) => state.customers)
+  const data: CustomerState = useSelector((state: RootState) => state.customers);
   const dispatch = useDispatch();
   useEffect(() => {
     const retrieveCustomers = () => dispatch(getCustomers());
