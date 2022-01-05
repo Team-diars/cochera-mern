@@ -2,18 +2,23 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const Customer = require("../models/customer");
 const getCustomers = async (req, res) => {
-    const customers = await Customer.find({ status: 1 }).exec();
-    return res.status(200).json({
-        ok: true,
-        customers: customers.map((customer) => {
-            return {
-                id: customer._id,
-                fullname: customer.fullname,
-                cellphone: customer.cellphone || "",
-                address: customer.address || "",
-            };
-        }),
-    });
+    try {
+        const customers = await Customer.find({ status: 1 }).exec();
+        return res.status(200).json({
+            ok: true,
+            customers: customers.map((customer) => {
+                return {
+                    id: customer._id,
+                    fullname: customer.fullname,
+                    cellphone: customer.cellphone || "",
+                    address: customer.address || "",
+                };
+            }),
+        });
+    }
+    catch (err) {
+        console.error(err);
+    }
 };
 const registerCustomer = async (req, res) => {
     try {

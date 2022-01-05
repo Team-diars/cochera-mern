@@ -16,6 +16,7 @@ export const getCustomers = () => async(dispatch: Dispatch<CustomerAction | Acti
   })
   try {
     const res = await axios.get("/api/customer", config);
+    console.log("res: ",res);
     dispatch({
       type: ActionType.RETRIEVE,
       payload: res.data.customers

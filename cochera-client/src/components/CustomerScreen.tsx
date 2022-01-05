@@ -1,7 +1,7 @@
 import { Button } from '@chakra-ui/button'
 import Icon from '@chakra-ui/icon';
 import { Box, Container, Heading, Text } from '@chakra-ui/layout';
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
   FiCheck,
   FiEdit,
@@ -12,7 +12,7 @@ import {
   FiX,
   FiXCircle,
 } from "react-icons/fi";
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import { CustomerTable } from './Table';
 export const CustomerScreen: React.FC = () => {
   return (

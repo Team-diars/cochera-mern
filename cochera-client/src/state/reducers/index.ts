@@ -1,5 +1,5 @@
 import {combineReducers} from 'redux';
-import customerReducers from './NotesReducer';
+import customerReducers from './CustomerReducer';
 
 const reducers = combineReducers({
   customers: customerReducers,

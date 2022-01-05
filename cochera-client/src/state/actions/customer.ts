@@ -2,6 +2,7 @@ import { ActionType } from "../action-types";
 import {Error} from './index'
 
 export interface Payload {
+  id: string,
   fullname: string,
   cellphone: string,
   address: string,

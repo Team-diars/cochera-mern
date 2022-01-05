@@ -9,7 +9,7 @@ const { getCustomers, registerCustomer, updateCustomer, deleteCustomer, } = requ
 const { fieldValidation } = require("../middleware/field-validation");
 const { validateJWT } = require("../middleware/validate-jwt");
 const router = express_1.default();
-router.use(validateJWT);
+// router.use(validateJWT);
 router.get("/", getCustomers);
 router.post("/create", [
     express_validator_1.check("fullname", "El nombre es requerido").not().isEmpty(),

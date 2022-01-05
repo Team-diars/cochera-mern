@@ -1,23 +1,26 @@
-export {};
-
+import {Request, Response} from 'express'
 const Customer = require("../models/customer");
 
-const getCustomers = async (req, res) => {
-  const customers = await Customer.find({ status: 1 }).exec();
-  return res.status(200).json({
-    ok: true,
-    customers: customers.map((customer) => {
-      return {
-        id: customer._id,
-        fullname: customer.fullname,
-        cellphone: customer.cellphone || "",
-        address: customer.address || "",
-      };
-    }),
-  });
+const getCustomers = async (req: Request, res: Response) => {
+  try {
+    const customers = await Customer.find({ status: 1 }).exec();
+    return res.status(200).json({
+      ok: true,
+      customers: customers.map((customer) => {
+        return {
+          id: customer._id,
+          fullname: customer.fullname,
+          cellphone: customer.cellphone || "",
+          address: customer.address || "",
+        };
+      }),
+    });
+  } catch (err) {
+    console.error(err)
+  }
 };
 
-const registerCustomer = async (req, res) => {
+const registerCustomer = async (req: Request, res: Response) => {
   try {
     const customer = new Customer(req.body);
     await customer.save();
@@ -39,7 +42,7 @@ const registerCustomer = async (req, res) => {
   }
 };
 
-const updateCustomer = async (req, res) => {
+const updateCustomer = async (req: Request, res: Response) => {
   try {
     const { id } = req.body;
     const customer = await Customer.findOne({ _id: id, status: 1 }).exec();
@@ -70,7 +73,7 @@ const updateCustomer = async (req, res) => {
   }
 };
 
-const deleteCustomer = async (req, res) => {
+const deleteCustomer = async (req: Request, res: Response) => {
   try {
     const { id } = req.body;
     const customer = await Customer.findOne({ _id: id, status: 1 }).exec();

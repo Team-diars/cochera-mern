@@ -8,15 +8,17 @@ const initialState: CustomerState = {
   error: null,
 }
 
-const reducer = (state: CustomerState, action: CustomerAction) => {
+const reducer = (state: CustomerState = initialState, action: CustomerAction) => {
   switch(action.type){
     case ActionType.RETRIEVE:
       return {
         ...state,
+        customers: action.payload,
         loading: false,
+        error: null,
       }
     default:
-      return reducer;
+      return state;
   }
 }
 

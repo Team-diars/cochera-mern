@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Table, TableCaption, Tbody, Td, Tfoot, Th, Thead, Tr } from '@chakra-ui/table';
 import { Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/menu';
 import { FiEdit, FiEye, FiMoreVertical, FiXCircle } from 'react-icons/fi';
@@ -6,6 +6,9 @@ import { Link } from 'react-router-dom';
 import { Button, IconButton } from '@chakra-ui/button';
 import { Portal, forwardRef, Icon, Popover, PopoverCloseButton, PopoverHeader, PopoverTrigger, Badge, Text, Box, PopoverContent, PopoverArrow, PopoverBody } from '@chakra-ui/react';
 import { CustomerState } from '../state/actions/customer';
+import { getCustomers } from '../state/action-creators';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../state';
 
 export const ActionsButton = forwardRef(({ label, ...rest }, ref) => {
   return (
@@ -29,6 +32,13 @@ export const ActionsButton = forwardRef(({ label, ...rest }, ref) => {
 });
 
 export const CustomerTable = () => {
+  const data: CustomerState = useSelector((state: RootState) => state.customers)
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const retrieveCustomers = () => dispatch(getCustomers());
+    retrieveCustomers();
+  },[dispatch])
+  
   return (
     <Table size='md' mt="10">
         <Thead>
@@ -42,74 +52,78 @@ export const CustomerTable = () => {
           </Tr>
         </Thead>
         <Tbody>
-          <Tr>
-            <Td>Diego Ccuro</Td>
-            <Td>94232025</Td>
-            <Td>Mz J Los Pinos, Comas</Td>
-            <Td>Wednesday, 12 October</Td>
-            <Td>
-              <Popover>
-                <PopoverTrigger>
-                  <Button size="sm">
-                    <Icon
-                      as={FiEye}
-                      h={[4]}
-                      w={[4]}
-                      aria-label="See Cars"
-                    />
-                  </Button>
-                </PopoverTrigger>
-                <Portal>
-                  <PopoverContent>
-                    <PopoverArrow />
-                    <PopoverHeader fontWeight="semibold">
-                      Autos
-                    </PopoverHeader>
-                    <PopoverCloseButton />
-                      <PopoverBody>
-                        <Box
-                          display="flex"
-                          flexDirection="row"
-                          alignItems="center"
-                        >
-                          <Badge
-                            rounded="full"
-                            px="2"
+          {
+           (!data.loading) && data.customers.map((customer) => (
+            <Tr key={customer.id}>
+              <Td>{customer.fullname}</Td>
+              <Td>{customer.cellphone}</Td>
+              <Td>{customer.address}</Td>
+              <Td>Wednesday, 12 October</Td>
+              <Td>
+                <Popover>
+                  <PopoverTrigger>
+                    <Button size="sm">
+                      <Icon
+                        as={FiEye}
+                        h={[4]}
+                        w={[4]}
+                        aria-label="See Cars"
+                      />
+                    </Button>
+                  </PopoverTrigger>
+                  <Portal>
+                    <PopoverContent>
+                      <PopoverArrow />
+                      <PopoverHeader fontWeight="semibold">
+                        Autos
+                      </PopoverHeader>
+                      <PopoverCloseButton />
+                        <PopoverBody>
+                          <Box
+                            display="flex"
+                            flexDirection="row"
+                            alignItems="center"
                           >
-                            DAR-231
-                          </Badge>
-                          <Text
-                            fontSize={["sm", "md"]}
-                            fontWeight="medium"
-                            ml="2"
-                          >
-                            KIA
-                          </Text>
-                        </Box>
-                      </PopoverBody>
-                  </PopoverContent>
-                </Portal>
-              </Popover>
-            </Td>
-            <Td>
-              <Menu isLazy placement="left-start">
-                <MenuButton as={ActionsButton}>
-                </MenuButton>
-                <Portal>
-                  <MenuList>
-                    <MenuItem
-                      icon={<FiEdit />} >
-                      Editar
-                    </MenuItem>
-                    <MenuItem
-                      icon={<FiXCircle />} >
-                      Eliminar
-                    </MenuItem>
-                  </MenuList>
-                </Portal>
-              </Menu>
-            </Td>
-          </Tr>
+                            <Badge
+                              rounded="full"
+                              px="2"
+                            >
+                              DAR-231
+                            </Badge>
+                            <Text
+                              fontSize={["sm", "md"]}
+                              fontWeight="medium"
+                              ml="2"
+                            >
+                              KIA
+                            </Text>
+                          </Box>
+                        </PopoverBody>
+                    </PopoverContent>
+                  </Portal>
+                </Popover>
+              </Td>
+              <Td>
+                <Menu isLazy placement="left-start">
+                  <MenuButton as={ActionsButton}>
+                  </MenuButton>
+                  <Portal>
+                    <MenuList>
+                      <MenuItem
+                        icon={<FiEdit />} >
+                        Editar
+                      </MenuItem>
+                      <MenuItem
+                        icon={<FiXCircle />} >
+                        Eliminar
+                      </MenuItem>
+                    </MenuList>
+                  </Portal>
+                </Menu>
+              </Td>
+            </Tr>
+           )) 
+          }
         </Tbody>
       </Table>
   )
