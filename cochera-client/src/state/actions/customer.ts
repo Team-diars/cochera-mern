@@ -2,7 +2,7 @@ import { ActionType } from "../action-types";
 import {Error} from './index'
 
 export interface Payload {
-  id: string,
+  id: string | null,
   fullname: string,
   cellphone: string,
   address: string,
@@ -14,7 +14,14 @@ export interface CustomerState {
   loading: Boolean,
   error: Error | null,
 }
-
+interface CreateAction {
+  type: ActionType.ADD,
+  payload: Payload
+}
+interface CreateError {
+  type: ActionType.ADD_ERROR,
+  payload: Error
+}
 interface RetrieveAction {
   type: ActionType.RETRIEVE,
   payload:Payload
@@ -29,4 +36,5 @@ interface RetrieveError {
   payload: Error  
 }
 
-export type CustomerAction = RetrieveAction | ClearCustomers | RetrieveError;
+export type CustomerAction = RetrieveAction | ClearCustomers | RetrieveError |
+                             CreateAction | CreateError

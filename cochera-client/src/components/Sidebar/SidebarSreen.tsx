@@ -2,7 +2,7 @@ import { Button } from '@chakra-ui/button'
 import { Box, Container, Heading } from '@chakra-ui/layout'
 import React from 'react'
 
-export const SidebarSreen = () => {
+export const SidebarSreen: React.FC = () => {
   return (
     <Container maxW='container.xl' padding="10">
       <Box display="flex" justifyContent="space-between">

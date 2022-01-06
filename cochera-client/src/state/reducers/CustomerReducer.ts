@@ -17,6 +17,20 @@ const reducer = (state: CustomerState = initialState, action: CustomerAction) =>
         loading: false,
         error: null,
       }
+    case ActionType.ADD:
+      return {
+        ...state,
+        customers: [action.payload, ...state.customers],
+        loading: false,
+        error: null
+      }
+    case ActionType.ADD_ERROR:
+    case ActionType.RETRIEVE_ERROR:
+      return {
+        ...state,
+        error: action.payload,
+        loading: false,
+      }
     default:
       return state;
   }
