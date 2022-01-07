@@ -20,6 +20,22 @@ const getCustomers = async (req: Request, res: Response) => {
   }
 };
 
+const getSingleCustomer = async (req: Request, res: Response) => {
+  try {
+    const {id} = req.params;
+    const customer = await Customer.find({ _id: id, status: 1 }).exec();
+    return res.status(200).json({
+      ok: true,
+      customer: customer
+    })
+  } catch (error) {
+    return res.status(500).json({
+      ok: false,
+      msg:"There has been an error: "+ error,
+    })
+  }
+}
+
 const registerCustomer = async (req: Request, res: Response) => {
   try {
     const customer = new Customer(req.body);
