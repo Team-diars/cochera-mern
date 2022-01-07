@@ -8,7 +8,7 @@ import { OmitCommonProps } from '@chakra-ui/system'
 import React, {LegacyRef, RefObject, useState} from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../state'
-import { addCustomer } from '../state/action-creators'
+import { addCustomer, updateCustomer } from '../state/action-creators'
 import { CustomerState, Payload } from '../state/actions/customer'
 interface IProps {
   initialRef: LegacyRef<HTMLInputElement>,
@@ -34,11 +34,10 @@ export const EditCustomer: React.FC<IProps> = ({initialRef, finalRef, isOpen, on
   }
   const dispatch = useDispatch();
 
-  const saveCustomer = (e: any) => {
-    e.preventDefault();
-    dispatch(addCustomer(formData));
+  const editCustomer = (formData: Payload) => {
+    if(!formData.id) return;
+    dispatch(updateCustomer(formData));
   }
-  console.log("state.customers: ",state.customers);
   return (
     <>
       <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
@@ -72,7 +71,7 @@ export const EditCustomer: React.FC<IProps> = ({initialRef, finalRef, isOpen, on
             <Button colorScheme='blue' mr={3} onClick={onClose}>
               Cerrar
             </Button>
-            <Button variant='ghost' onClick={(e) => saveCustomer(e)}>Guardar</Button>
+            <Button variant='ghost' onClick={(e) => editCustomer(formData)}>Guardar</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

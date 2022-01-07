@@ -96,7 +96,7 @@ export const updateCustomer = (formData: Payload) => async(dispatch: Dispatch<Cu
 
 export const deleteCustomer = (id: string) => async(dispatch: Dispatch<CustomerAction | Action>) => {
   try {
-    await axios.delete(`http://localhost:8000/api/customer/delete`, {
+    await axios.delete(`/api/customer/delete`, {
       ...config.headers,
       data: {
         id: id

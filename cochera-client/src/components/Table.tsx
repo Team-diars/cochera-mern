@@ -1,14 +1,16 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { Table, TableCaption, Tbody, Td, Tfoot, Th, Thead, Tr } from '@chakra-ui/table';
 import { Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/menu';
 import { FiEdit, FiEye, FiMoreVertical, FiXCircle } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import { Button, IconButton } from '@chakra-ui/button';
-import { Portal, forwardRef, Icon, Popover, PopoverCloseButton, PopoverHeader, PopoverTrigger, Badge, Text, Box, PopoverContent, PopoverArrow, PopoverBody } from '@chakra-ui/react';
-import { CustomerState } from '../state/actions/customer';
-import { deleteCustomer, getCustomers } from '../state/action-creators';
+import { Portal, forwardRef, Icon, Popover, PopoverCloseButton, PopoverHeader, PopoverTrigger, Badge, Text, Box, PopoverContent, PopoverArrow, PopoverBody, useDisclosure } from '@chakra-ui/react';
+import { CustomerState, Payload } from '../state/actions/customer';
+import { deleteCustomer, getCustomers, updateCustomer } from '../state/action-creators';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../state';
+import { EditCustomer } from './EditCustomer';
+import { useSelectedContext } from '../context/PopupContext';
 
 export const ActionsButton = forwardRef(({ label, ...rest }, ref) => {
   return (
@@ -34,6 +36,12 @@ export const ActionsButton = forwardRef(({ label, ...rest }, ref) => {
 export const CustomerTable = () => {
   const data: CustomerState = useSelector((state: RootState) => state.customers);
   const dispatch = useDispatch();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const initialRef = useRef<HTMLInputElement>(null);
+  const finalRef = useRef<HTMLHeadingElement>(null);
+  const {contextActions: {setIsOpen}, contextState: {isOpen: isEditPopupOpen}} = useSelectedContext();
+
+
   useEffect(() => {
     const retrieveCustomers = () => dispatch(getCustomers());
     retrieveCustomers();
@@ -42,6 +50,7 @@ export const CustomerTable = () => {
     if (!id) return;
     dispatch(deleteCustomer(id));
   }
+  console.log("isEditPopupOpen: ",isEditPopupOpen);
   return (
     <Table size='md' mt="10">
         <Thead>
@@ -113,12 +122,13 @@ export const CustomerTable = () => {
                   <Portal>
                     <MenuList>
                       <MenuItem
-                        icon={<FiEdit />} >
+                        icon={<FiEdit />} 
+                        onClick={() => setIsOpen(true)}> 
                         Editar
                       </MenuItem>
                       <MenuItem
                         icon={<FiXCircle />} 
-                        onClick={() => removeCustomer(customer.id) }>
+                        onClick={() => removeCustomer(customer.id)}>
                         Eliminar
                       </MenuItem>
                     </MenuList>

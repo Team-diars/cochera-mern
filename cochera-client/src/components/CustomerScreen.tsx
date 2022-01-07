@@ -3,6 +3,7 @@ import { useDisclosure } from '@chakra-ui/hooks';
 import Icon from '@chakra-ui/icon';
 import { Box, Container, Heading, Text } from '@chakra-ui/layout';
 import React, { useEffect, useRef, useState } from 'react'
+
 import {
   FiCheck,
   FiEdit,
@@ -17,7 +18,6 @@ import { connect, useSelector } from 'react-redux';
 import { AddCustomer } from './AddCustomer';
 import { CustomerTable } from './Table';
 export const CustomerScreen: React.FC = () => {
-  // const [isOpen, setIsOpen] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure()
   const initialRef = useRef<HTMLInputElement>(null)
   const finalRef = useRef<HTMLHeadingElement>(null)
