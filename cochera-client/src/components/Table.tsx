@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { Button, IconButton } from '@chakra-ui/button';
 import { Portal, forwardRef, Icon, Popover, PopoverCloseButton, PopoverHeader, PopoverTrigger, Badge, Text, Box, PopoverContent, PopoverArrow, PopoverBody } from '@chakra-ui/react';
 import { CustomerState } from '../state/actions/customer';
-import { getCustomers } from '../state/action-creators';
+import { deleteCustomer, getCustomers } from '../state/action-creators';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../state';
 
@@ -38,7 +38,10 @@ export const CustomerTable = () => {
     const retrieveCustomers = () => dispatch(getCustomers());
     retrieveCustomers();
   },[dispatch])
-  
+  const removeCustomer = (id: string | null = null) => {
+    if (!id) return;
+    dispatch(deleteCustomer(id));
+  }
   return (
     <Table size='md' mt="10">
         <Thead>
@@ -114,7 +117,8 @@ export const CustomerTable = () => {
                         Editar
                       </MenuItem>
                       <MenuItem
-                        icon={<FiXCircle />} >
+                        icon={<FiXCircle />} 
+                        onClick={() => removeCustomer(customer.id) }>
                         Eliminar
                       </MenuItem>
                     </MenuList>

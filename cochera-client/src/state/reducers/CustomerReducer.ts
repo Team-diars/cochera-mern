@@ -1,5 +1,5 @@
 import { ActionType } from "../action-types";
-import { CustomerAction, CustomerState, Payload } from "../actions/customer";
+import { CustomerAction, CustomerState } from "../actions/customer";
 
 const initialState: CustomerState = {
   customers: [],
@@ -34,7 +34,7 @@ const reducer = (state: CustomerState = initialState, action: CustomerAction) =>
       return {
         ...state,
         loading: false,
-        customers: state.customers.filter(customer => customer.id !== action.payload.id)
+        customers: state.customers.filter(customer => customer.id !== action.payload)
       }
     case ActionType.EDIT_ERROR:
     case ActionType.DELETE_ERROR:

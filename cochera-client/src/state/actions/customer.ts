@@ -2,7 +2,7 @@ import { ActionType } from "../action-types";
 import {Error} from './index'
 
 export interface Payload {
-  id: string | null,
+  id: string,
   fullname: string,
   cellphone: string,
   address: string,
@@ -38,7 +38,7 @@ interface RetrieveError {
 
 interface DeleteCustomer {
   type: ActionType.DELETE,
-  payload: Payload
+  payload: string
 }
 
 interface DeleteError {

@@ -1,11 +1,11 @@
-import axios, { AxiosError, AxiosResponse } from 'axios';
+import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { Response } from 'express';
 import { Dispatch } from 'react';
 import { ActionType } from '../action-types';
 import { Action } from '../actions';
 import { CustomerAction, Payload } from '../actions/customer';
 
-const config= {
+const config: AxiosRequestConfig = {
   headers: {
     'Content-Type': 'application/json'
   }
@@ -75,7 +75,7 @@ export const addCustomer = (formData: Payload) => async(dispatch: Dispatch<Custo
 
 export const updateCustomer = (formData: Payload) => async(dispatch: Dispatch<CustomerAction | Action>) => {
   try {
-    let response = await axios.put(`/api/customer/update/${formData.id}`,config);
+    let response = await axios.put(`/api/customer/update/${formData.id}`,formData ,config);
     dispatch({
       type: ActionType.EDIT,
       payload: response.data,
@@ -94,12 +94,17 @@ export const updateCustomer = (formData: Payload) => async(dispatch: Dispatch<Cu
   }
 }
 
-export const deleteCustomer = (id: number) => async(dispatch: Dispatch<CustomerAction | Action>) => {
+export const deleteCustomer = (id: string) => async(dispatch: Dispatch<CustomerAction | Action>) => {
   try {
-    const res = await axios.delete(`/api/customer/delete/${id}`,config);
+    await axios.delete(`http://localhost:8000/api/customer/delete`, {
+      ...config.headers,
+      data: {
+        id: id
+      }
+    });
     dispatch({
       type:ActionType.DELETE,
-      payload: res.data
+      payload: id
     });
   } catch (err) {
     let error = err as AxiosError;

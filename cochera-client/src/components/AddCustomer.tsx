@@ -19,7 +19,7 @@ interface IProps {
 export const AddCustomer: React.FC<IProps> = ({initialRef, finalRef, isOpen, onClose}) => {
   const state: CustomerState = useSelector((state: RootState) => state.customers);
   const [formData, setFormData] = useState<Payload>({
-    id: null,
+    id: "",
     fullname: "",
     address: "",
     cellphone: "",
