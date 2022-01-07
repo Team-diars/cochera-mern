@@ -56,7 +56,18 @@ interface EditError {
   payload: Error
 }
 
+interface RetrieveSingleCustomer {
+  type: ActionType.RETRIEVE_SINGLE_CUSTOMER,
+  payload: Payload
+}
+
+interface RetrieveSingleCustomerError {
+  type: ActionType.RETRIEVE_SINGLE_CUSTOMER_ERROR,
+  payload: Payload,
+}
+
 export type CustomerAction = RetrieveAction | ClearCustomers | RetrieveError |
                              CreateAction | CreateError | 
                              DeleteCustomer | DeleteError |
-                             EditCustomer | EditError;
+                             EditCustomer | EditError |
+                             RetrieveSingleCustomer | RetrieveSingleCustomerError;

@@ -17,6 +17,13 @@ const reducer = (state: CustomerState = initialState, action: CustomerAction) =>
         loading: false,
         error: null,
       }
+    case ActionType.RETRIEVE_SINGLE_CUSTOMER:
+      return {
+        ...state,
+        customer: action.payload,
+        loading:false,
+        error:null
+      }
     case ActionType.ADD:
       return {
         ...state,
@@ -40,6 +47,7 @@ const reducer = (state: CustomerState = initialState, action: CustomerAction) =>
     case ActionType.DELETE_ERROR:
     case ActionType.ADD_ERROR:
     case ActionType.RETRIEVE_ERROR:
+    case ActionType.RETRIEVE_SINGLE_CUSTOMER_ERROR:
       return {
         ...state,
         error: action.payload,
