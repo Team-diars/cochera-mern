@@ -122,4 +122,5 @@ module.exports = {
   registerCustomer,
   updateCustomer,
   deleteCustomer,
+  getSingleCustomer,
 };

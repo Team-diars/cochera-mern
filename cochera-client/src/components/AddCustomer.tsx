@@ -37,6 +37,7 @@ export const AddCustomer: React.FC<IProps> = ({initialRef, finalRef, isOpen, onC
   const saveCustomer = (e: any) => {
     e.preventDefault();
     dispatch(addCustomer(formData));
+    onClose();
   }
   console.log("state.customers: ",state.customers);
   return (
