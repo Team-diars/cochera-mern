@@ -24,6 +24,20 @@ const reducer = (state: CustomerState = initialState, action: CustomerAction) =>
         loading: false,
         error: null
       }
+    case ActionType.EDIT:
+      return {
+        ...state,
+        loading: false,
+        customers: state.customers.map(customer => customer.id === action.payload.id ? customer = action.payload : customer)
+      }
+    case ActionType.DELETE:
+      return {
+        ...state,
+        loading: false,
+        customers: state.customers.filter(customer => customer.id !== action.payload.id)
+      }
+    case ActionType.EDIT_ERROR:
+    case ActionType.DELETE_ERROR:
     case ActionType.ADD_ERROR:
     case ActionType.RETRIEVE_ERROR:
       return {
