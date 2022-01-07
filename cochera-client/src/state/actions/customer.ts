@@ -36,5 +36,27 @@ interface RetrieveError {
   payload: Error  
 }
 
+interface DeleteCustomer {
+  type: ActionType.DELETE,
+  payload: Payload
+}
+
+interface DeleteError {
+  type: ActionType.DELETE_ERROR,
+  payload: Error
+}
+
+interface EditCustomer {
+  type: ActionType.EDIT,
+  payload: Payload
+}
+
+interface EditError {
+  type: ActionType.EDIT_ERROR,
+  payload: Error
+}
+
 export type CustomerAction = RetrieveAction | ClearCustomers | RetrieveError |
-                             CreateAction | CreateError
+                             CreateAction | CreateError | 
+                             DeleteCustomer | DeleteError |
+                             EditCustomer | EditError;
