@@ -5,7 +5,7 @@ import {connectToDB} from './config/db'
 require("dotenv").config();
 const app = express();
 
-const server = http.createServer(app);
+const server: http.Server = http.createServer(app);
 const PORT = process.env.PORT || 8000;
 
 connectToDB();

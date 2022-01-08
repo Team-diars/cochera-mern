@@ -5,6 +5,11 @@ import { ActionType } from '../action-types';
 import { Action } from '../actions';
 import { CustomerAction, Payload } from '../actions/customer';
 
+interface Customer {
+  ok: boolean,
+  customers: Array<Payload>
+}
+
 const config: AxiosRequestConfig = {
   headers: {
     'Content-Type': 'application/json'
@@ -50,6 +55,28 @@ export const getCustomers = () => async(dispatch: Dispatch<CustomerAction | Acti
     }
   }
 }
+
+export const getSingleCustomer = (id: string) => async (dispatch: Dispatch<CustomerAction | Action>) => {
+  try {
+    const response = await axios.get<Customer>(`/api/customer/${id}`, config);
+    dispatch({
+      type: ActionType.RETRIEVE_SINGLE_CUSTOMER,
+      payload: response.data.customers[0]
+    })
+  } catch (err) {
+    let error = err as AxiosError;
+    if (error.response) {
+      dispatch({
+        type: ActionType.RETRIEVE_SINGLE_CUSTOMER_ERROR,
+        payload: {
+          msg: error.response.data,
+          status: error.response.status
+        }
+      })
+    }
+  }
+}
+
 export const addCustomer = (formData: Payload) => async(dispatch: Dispatch<CustomerAction | Action>) => {
   try {
     const res = await axios.post('/api/customer/create',formData ,config);

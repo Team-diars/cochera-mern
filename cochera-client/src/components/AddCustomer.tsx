@@ -23,6 +23,9 @@ export const AddCustomer: React.FC<IProps> = ({initialRef, finalRef, isOpen, onC
     fullname: "",
     address: "",
     cellphone: "",
+    cars: [],
+    date: null,
+    status: null
   })
   const {fullname, address, cellphone} = formData;
   const onChange = (e: any) => {

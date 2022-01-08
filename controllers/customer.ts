@@ -1,4 +1,5 @@
 import {Request, Response} from 'express'
+import { Customer } from '../types/customer';
 const Customer = require("../models/customer");
 
 const getCustomers = async (req: Request, res: Response) => {
@@ -24,10 +25,21 @@ const getSingleCustomer = async (req: Request, res: Response) => {
   try {
     const {id} = req.params;
     const customer = await Customer.find({ _id: id, status: 1 }).exec();
+    console.log(customer);
     return res.status(200).json({
       ok: true,
-      customer: customer
-    })
+      customers: customer.map((customer: Customer) => {
+        return {
+          id: customer._id,
+          fullname: customer.fullname, 
+          cellphone: customer.cellphone || "",
+          address: customer.address || "",
+          cars: customer.cars || [],
+          status: customer.status,
+          date: customer.date
+        }
+      }),
+    });
   } catch (error) {
     return res.status(500).json({
       ok: false,

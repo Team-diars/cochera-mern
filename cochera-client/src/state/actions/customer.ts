@@ -6,6 +6,9 @@ export interface Payload {
   fullname: string,
   cellphone: string,
   address: string,
+  status: number | null,
+  cars: Array<String>,
+  date: Date | null,
 }
 
 export interface CustomerState {
@@ -63,7 +66,7 @@ interface RetrieveSingleCustomer {
 
 interface RetrieveSingleCustomerError {
   type: ActionType.RETRIEVE_SINGLE_CUSTOMER_ERROR,
-  payload: Payload,
+  payload: Error,
 }
 
 export type CustomerAction = RetrieveAction | ClearCustomers | RetrieveError |

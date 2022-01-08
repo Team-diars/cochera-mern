@@ -5,8 +5,10 @@ import { Input } from '@chakra-ui/input'
 import { Box, Text } from '@chakra-ui/layout'
 import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from '@chakra-ui/modal'
 import { OmitCommonProps } from '@chakra-ui/system'
-import React, {LegacyRef, RefObject, useState} from 'react'
+import { stat } from 'fs'
+import React, {LegacyRef, RefObject, useEffect, useState} from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useSelectedContext } from '../context/PopupContext'
 import { RootState } from '../state'
 import { addCustomer, updateCustomer } from '../state/action-creators'
 import { CustomerState, Payload } from '../state/actions/customer'
@@ -23,6 +25,9 @@ export const EditCustomer: React.FC<IProps> = ({initialRef, finalRef, isOpen, on
     fullname: "",
     address: "",
     cellphone: "",
+    status: 0,
+    cars: [],
+    date: null,
   })
   const {fullname, address, cellphone} = formData;
   const onChange = (e: any) => {
@@ -33,14 +38,45 @@ export const EditCustomer: React.FC<IProps> = ({initialRef, finalRef, isOpen, on
     });
   }
   const dispatch = useDispatch();
-
+  const {contextActions: {setIsOpen, setIdSelected}, contextState: {isOpen: isEditPopupOpen}} = useSelectedContext();
   const editCustomer = (formData: Payload) => {
     if(!formData.id) return;
     dispatch(updateCustomer(formData));
   }
+  const emptyCustomerState = (): void => {
+    setFormData({
+      id: "",
+      fullname: "",
+      address: "",
+      cellphone: "",
+      status: 0,
+      cars: [],
+      date: null,
+    })
+  }
+  const onClosePopup = () => {
+    setIsOpen(false);
+    setIdSelected(null);    
+    onClose();
+    // emptyCustomerState();
+  }
+  useEffect(() => {
+    console.log("state.customer: ",state.customer);
+    if(!state.loading){
+      setFormData({
+        id: state.customer?.id || "",
+        fullname: state.customer?.fullname || "",
+        address: state.customer?.address || "",
+        cellphone: state.customer?.cellphone || "",
+        status: state.customer?.status || 0,
+        cars: state.customer?.cars || [],
+        date: state.customer?.date || null,
+      })
+    }
+  },[state.customer])
   return (
     <>
-      <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
+      <Modal finalFocusRef={finalRef} isOpen={true} onClose={onClosePopup}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Editar Cliente</ModalHeader>
@@ -68,7 +104,7 @@ export const EditCustomer: React.FC<IProps> = ({initialRef, finalRef, isOpen, on
 
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme='blue' mr={3} onClick={onClose}>
+            <Button colorScheme='blue' mr={3} onClick={onClosePopup}>
               Cerrar
             </Button>
             <Button variant='ghost' onClick={(e) => editCustomer(formData)}>Guardar</Button>

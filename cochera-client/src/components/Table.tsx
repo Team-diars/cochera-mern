@@ -2,14 +2,12 @@ import React, { useContext, useEffect, useRef, useState } from 'react'
 import { Table, TableCaption, Tbody, Td, Tfoot, Th, Thead, Tr } from '@chakra-ui/table';
 import { Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/menu';
 import { FiEdit, FiEye, FiMoreVertical, FiXCircle } from 'react-icons/fi';
-import { Link } from 'react-router-dom';
 import { Button, IconButton } from '@chakra-ui/button';
 import { Portal, forwardRef, Icon, Popover, PopoverCloseButton, PopoverHeader, PopoverTrigger, Badge, Text, Box, PopoverContent, PopoverArrow, PopoverBody, useDisclosure } from '@chakra-ui/react';
 import { CustomerState, Payload } from '../state/actions/customer';
-import { deleteCustomer, getCustomers, updateCustomer } from '../state/action-creators';
+import { deleteCustomer, getCustomers, getSingleCustomer, updateCustomer } from '../state/action-creators';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../state';
-import { EditCustomer } from './EditCustomer';
 import { useSelectedContext } from '../context/PopupContext';
 
 export const ActionsButton = forwardRef(({ label, ...rest }, ref) => {
@@ -36,23 +34,29 @@ export const ActionsButton = forwardRef(({ label, ...rest }, ref) => {
 export const CustomerTable = () => {
   const data: CustomerState = useSelector((state: RootState) => state.customers);
   const dispatch = useDispatch();
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const initialRef = useRef<HTMLInputElement>(null);
-  const finalRef = useRef<HTMLHeadingElement>(null);
-  const {contextActions: {setIsOpen}, contextState: {isOpen: isEditPopupOpen}} = useSelectedContext();
-
+  const {contextActions: {setIsOpen, setIdSelected}, contextState: {isOpen: isEditPopupOpen, idSelected}} = useSelectedContext();
 
   useEffect(() => {
     const retrieveCustomers = () => dispatch(getCustomers());
     retrieveCustomers();
   },[dispatch])
-  const removeCustomer = (id: string | null = null) => {
+  const removeCustomer = (id: string | null = null): void => {
     if (!id) return;
     dispatch(deleteCustomer(id));
   }
-  console.log("isEditPopupOpen: ",isEditPopupOpen);
+  const updateCustomer = (id: string): void => {
+    setIdSelected(id);
+    setIsOpen(true);
+  }
+  useEffect(() => {
+    if(idSelected){
+      const retrieveSingleCustomer = (id: string) => dispatch(getSingleCustomer(id));
+      retrieveSingleCustomer(idSelected);
+    }
+  },[idSelected])
+  console.log("idSelected: ",idSelected);
   return (
-    <Table size='md' mt="10">
+    <Table size='sm' mt="10" variant='simple' colorScheme='gray' border='1px' borderColor='gray.200'>
         <Thead>
           <Tr>
             <Th>Nombre</Th>
@@ -123,7 +127,7 @@ export const CustomerTable = () => {
                     <MenuList>
                       <MenuItem
                         icon={<FiEdit />} 
-                        onClick={() => setIsOpen(true)}> 
+                        onClick={() => updateCustomer(customer.id)}> 
                         Editar
                       </MenuItem>
                       <MenuItem
