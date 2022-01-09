@@ -25,7 +25,6 @@ export const EditCustomer: React.FC<IProps> = ({initialRef, finalRef, isOpen, on
     fullname: "",
     address: "",
     cellphone: "",
-    status: 0,
     cars: [],
     date: null,
   })
@@ -57,7 +56,6 @@ export const EditCustomer: React.FC<IProps> = ({initialRef, finalRef, isOpen, on
         fullname: state.customer?.fullname || "",
         address: state.customer?.address || "",
         cellphone: state.customer?.cellphone || "",
-        status: state.customer?.status || 0,
         cars: state.customer?.cars || [],
         date: state.customer?.date || null,
       })

@@ -79,6 +79,7 @@ export const getSingleCustomer = (id: string) => async (dispatch: Dispatch<Custo
 
 export const addCustomer = (formData: Payload) => async(dispatch: Dispatch<CustomerAction | Action>) => {
   try {
+    console.log("formData: ",formData);
     const res = await axios.post('/api/customer/create',formData ,config);
     console.log("res: ",res);
     dispatch({
