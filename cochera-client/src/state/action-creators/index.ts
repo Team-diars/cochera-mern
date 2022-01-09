@@ -102,11 +102,12 @@ export const addCustomer = (formData: Payload) => async(dispatch: Dispatch<Custo
 
 export const updateCustomer = (formData: Payload) => async(dispatch: Dispatch<CustomerAction | Action>) => {
   try {
-    let response = await axios.put(`/api/customer/update/${formData.id}`,formData ,config);
+    let response = await axios.put(`http://localhost:8000/api/customer/edit`,formData ,config);
     dispatch({
       type: ActionType.EDIT,
-      payload: response.data,
+      payload: response.data.customer,
     })
+    console.log(response.data)
   } catch (err) {
     let error = err as AxiosError;
     if (error.response){

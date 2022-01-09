@@ -6,9 +6,7 @@ import { SidebarSreen } from './components/Sidebar/SidebarSreen';
 import { Provider } from 'react-redux';
 import {store} from './state/store';
 import {AppContextProvider} from './context/PopupContext';
-import { useState } from 'react';
 function App() {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
   return (
     <Provider store={store}>
       <AppContextProvider>

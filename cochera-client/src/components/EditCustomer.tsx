@@ -42,23 +42,12 @@ export const EditCustomer: React.FC<IProps> = ({initialRef, finalRef, isOpen, on
   const editCustomer = (formData: Payload) => {
     if(!formData.id) return;
     dispatch(updateCustomer(formData));
-  }
-  const emptyCustomerState = (): void => {
-    setFormData({
-      id: "",
-      fullname: "",
-      address: "",
-      cellphone: "",
-      status: 0,
-      cars: [],
-      date: null,
-    })
+    onClosePopup();
   }
   const onClosePopup = () => {
     setIsOpen(false);
     setIdSelected(null);    
     onClose();
-    // emptyCustomerState();
   }
   useEffect(() => {
     console.log("state.customer: ",state.customer);

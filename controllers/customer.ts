@@ -25,7 +25,6 @@ const getSingleCustomer = async (req: Request, res: Response) => {
   try {
     const {id} = req.params;
     const customer = await Customer.find({ _id: id, status: 1 }).exec();
-    console.log(customer);
     return res.status(200).json({
       ok: true,
       customers: customer.map((customer: Customer) => {
