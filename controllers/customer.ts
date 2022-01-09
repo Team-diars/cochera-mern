@@ -4,7 +4,7 @@ const Customer = require("../models/customer");
 
 const getCustomers = async (req: Request, res: Response) => {
   try {
-    const customers = await Customer.find({ status: 1 }).exec();
+    const customers = await Customer.find({ status: 1 }).sort({_id:-1}).exec();
     return res.status(200).json({
       ok: true,
       customers: customers.map((customer) => {
