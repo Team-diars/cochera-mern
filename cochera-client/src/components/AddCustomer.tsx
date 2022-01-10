@@ -24,7 +24,7 @@ export const AddCustomer: React.FC<IProps> = ({initialRef, finalRef, isOpen, onC
     address: "",
     cellphone: "",
     cars: [],
-    date: null,
+    date: new Date,
   })
   const {fullname, address, cellphone} = formData;
   const onChange = (e: any) => {
@@ -67,7 +67,6 @@ export const AddCustomer: React.FC<IProps> = ({initialRef, finalRef, isOpen, onC
 
             <FormControl mt={4}>
               <FormLabel>Autos</FormLabel>
-              <Input placeholder='Autos' onChange={(e) => onChange(e)} />
             </FormControl>
 
           </ModalBody>

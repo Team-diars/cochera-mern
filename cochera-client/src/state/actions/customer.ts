@@ -14,7 +14,7 @@ export interface Payload {
   cellphone: string,
   address: string,
   cars: Array<Car>,
-  date: Date | null,
+  date: Date,
 }
 
 export interface CustomerState {

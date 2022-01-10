@@ -9,6 +9,8 @@ import { deleteCustomer, getCustomers, getSingleCustomer, updateCustomer } from 
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../state';
 import { useSelectedContext } from '../context/PopupContext';
+import { default as dayjs } from 'dayjs';
+import { DateFormat } from '../utils/Date';
 
 export const ActionsButton = forwardRef(({ label, ...rest }, ref) => {
   return (
@@ -74,7 +76,9 @@ export const CustomerTable = () => {
               <Td>{customer.fullname}</Td>
               <Td>{customer.cellphone}</Td>
               <Td>{customer.address}</Td>
-              <Td>Wednesday, 12 October</Td>
+              <Td>
+                <DateFormat position="relative" date={customer.date}/>
+              </Td>
               <Td>
                 <Popover>
                   <PopoverTrigger>

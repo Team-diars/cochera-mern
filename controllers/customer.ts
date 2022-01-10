@@ -7,12 +7,15 @@ const getCustomers = async (req: Request, res: Response) => {
     const customers = await Customer.find({ status: 1 }).sort({_id:-1}).exec();
     return res.status(200).json({
       ok: true,
-      customers: customers.map((customer) => {
+      customers: customers.map((customer: Customer) => {
         return {
           id: customer._id,
           fullname: customer.fullname,
           cellphone: customer.cellphone || "",
           address: customer.address || "",
+          cars: customer.cars || [],
+          status: customer.status,
+          date: customer.date
         };
       }),
     });
@@ -59,6 +62,9 @@ const registerCustomer = async (req: Request, res: Response) => {
         fullname: customer.fullname,
         cellphone: customer.cellphone || "",
         address: customer.address || "",
+        cars: customer.cars || [],
+        status: customer.status,
+        date: customer.date
       },
     });
   } catch (error) {
