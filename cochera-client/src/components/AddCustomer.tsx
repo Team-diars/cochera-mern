@@ -5,6 +5,7 @@ import { Input } from '@chakra-ui/input'
 import { Box, Text } from '@chakra-ui/layout'
 import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from '@chakra-ui/modal'
 import { OmitCommonProps } from '@chakra-ui/system'
+import { message, Upload } from 'antd'
 import React, {LegacyRef, RefObject, useState} from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../state'
@@ -16,6 +17,13 @@ interface IProps {
   isOpen: boolean,
   onClose: () => void,
 }
+const props = {
+  headers: {
+    authorization: 'authorization-text',
+  },
+  action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
+  name: 'file',
+};
 export const AddCustomer: React.FC<IProps> = ({initialRef, finalRef, isOpen, onClose}) => {
   const state: CustomerState = useSelector((state: RootState) => state.customers);
   const [formData, setFormData] = useState<Payload>({
@@ -67,6 +75,22 @@ export const AddCustomer: React.FC<IProps> = ({initialRef, finalRef, isOpen, onC
 
             <FormControl mt={4}>
               <FormLabel>Autos</FormLabel>
+              <Upload {...props}
+                onChange={(response) => {
+                  if (response.file.status !== 'uploading') {
+                    console.log(response.file, response.fileList);
+                  }
+                  if (response.file.status === 'done') {
+                    message.success(`${response.file.name} 
+                                    file uploaded successfully`);
+                  } else if (response.file.status === 'error') {
+                    message.error(`${response.file.name} 
+                                  file upload failed.`);
+                  }
+                }}
+              >
+                <Button>Upload File</Button>
+              </Upload>
             </FormControl>
 
           </ModalBody>
