@@ -1,0 +1,2 @@
+mostrar: nombre, telf, address, fecha de registro, carros 
+para agregar: agregar imagenes indefinidamente 

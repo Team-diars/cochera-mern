@@ -5,15 +5,18 @@ const {
   registerCustomer,
   updateCustomer,
   deleteCustomer,
+  getSingleCustomer
 } = require("../controllers/customer");
 const { fieldValidation } = require("../middleware/field-validation");
 const { validateJWT } = require("../middleware/validate-jwt");
 
 const router = Router();
 
-router.use(validateJWT);
+// router.use(validateJWT);
 
 router.get("/", getCustomers);
+
+router.get("/:id", getSingleCustomer)
 
 router.post(
   "/create",

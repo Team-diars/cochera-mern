@@ -5,7 +5,7 @@ import {connectToDB} from './config/db'
 require("dotenv").config();
 const app = express();
 
-const server = http.createServer(app);
+const server: http.Server = http.createServer(app);
 const PORT = process.env.PORT || 8000;
 
 connectToDB();
@@ -20,4 +20,3 @@ app.use(express.json());
 app.use("/api/", require("./routes/auth"));
 app.use("/api/user", require("./routes/user"));
 app.use("/api/customer", require("./routes/customer"));
-app.use("/api/car", require("./routes/car"));
