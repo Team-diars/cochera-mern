@@ -8,7 +8,7 @@ import { useSelectedContext } from '../context/PopupContext'
 import { RootState } from '../state'
 import { addCustomer, updateCustomer } from '../state/action-creators'
 import { CustomerState, Payload } from '../state/actions/customer'
-import { Upload } from 'antd';
+import { Progress, Spin, Upload } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
 function getBase64(file: Blob | undefined) {
@@ -20,6 +20,18 @@ function getBase64(file: Blob | undefined) {
       reader.onerror = error => reject(error);
     }
   });
+}
+const convertBase64 = (file:File) => {
+  return new Promise((resolve, reject) => {
+    const fileReader = new FileReader();
+    fileReader.readAsDataURL(file)
+    fileReader.onload = () => {
+      resolve(fileReader?.result);
+    }
+    fileReader.onerror = (error) => {
+      reject(error);
+    }
+  })
 }
 
 interface IProps {
@@ -36,6 +48,9 @@ interface UploadState {
 }
 export const EditCustomer: React.FC<IProps> = ({initialRef, finalRef, isOpen, onClose}) => {
   const state: CustomerState = useSelector((state: RootState) => state.customers);
+  const [uploadedFiles, setUploadedFiles] = useState<any>([]);
+  const [remainingFiles, setRemainingFiles] = useState<any>([]);
+  const [uploa5ding, setUploading] = useState(false);
   const [formData, setFormData] = useState<Payload>({
     id: "",
     fullname: "",
@@ -45,57 +60,6 @@ export const EditCustomer: React.FC<IProps> = ({initialRef, finalRef, isOpen, on
     date: new Date,
   })
   const {fullname, address, cellphone} = formData;
-  const [uploadImage, setUploadImage] = useState<UploadState>({
-    previewVisible: false,
-    previewImage: '',
-    previewTitle: '',
-    fileList: [
-      {
-        uid: '-1',
-        name: 'image.png',
-        status: 'done',
-        url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-      },
-      {
-        uid: '-2',
-        name: 'image.png',
-        status: 'done',
-        url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-      },
-      {
-        uid: '-3',
-        name: 'image.png',
-        status: 'done',
-        url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-      },
-      {
-        uid: '-4',
-        name: 'image.png',
-        status: 'done',
-        url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-      },
-      {
-        uid: '-xxx',
-        percent: 50,
-        name: 'image.png',
-        status: 'uploading',
-        url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-      },
-      {
-        uid: '-5',
-        name: 'image.png',
-        status: 'error',
-      },
-    ],
-  });
-  const {fileList,previewVisible,previewImage,previewTitle} = uploadImage;
-  const handleCancel = () => {
-    const {previewVisible, ...rest} = uploadImage
-    setUploadImage({
-      previewVisible:false,
-      ...rest
-    })
-  }
   const onChange = (e: any) => {
     e.preventDefault();
     setFormData({
@@ -115,13 +79,7 @@ export const EditCustomer: React.FC<IProps> = ({initialRef, finalRef, isOpen, on
     setIdSelected(null);    
     onClose();
   }
-  const handleChange = (fileListParam: Array<{uid?: string, percent?:number, name?: string, status?: string, url?: string}>): void => {
-    const {fileList, ...rest} = uploadImage
-    setUploadImage({
-      fileList: fileListParam,
-      ...rest
-    })
-  }
+  
   const handlePreview = async(file: {uid?: string, percent?:number, name?: string, status?: string, url?: string, preview?: Promise<unknown | undefined>, originFileObj?: Blob}) => {
     if (!file.url && !file.preview) {
       if (await getBase64(file.originFileObj) != undefined){
@@ -142,11 +100,28 @@ export const EditCustomer: React.FC<IProps> = ({initialRef, finalRef, isOpen, on
       })
     }
   },[state.customer])
-  const uploadButton = (
-    <div>
-      <PlusOutlined />
-      <div style={{ marginTop: 8 }}>Upload</div>
-    </div>
+  
+
+  const processRemainingFiles = async () => {
+    let file = remainingFiles[0];
+    //await uploadFile(file);
+    console.log("[uploadFile]", file);
+    setUploadedFiles([...uploadedFiles, file]);
+    setRemainingFiles(remainingFiles.filter((x: any) => x !== file));
+  };
+
+  useEffect(() => {
+    if (remainingFiles.length > 0) {
+      //uploadFile();
+    } else {
+      console.log("[useEffect] Finished.");
+      setUploading(false);
+    }
+  }, [remainingFiles]);
+
+  let percent = Math.round(
+    (uploadedFiles.length / (uploadedFiles.length + remainingFiles.length)) *
+      100
   );
   return (
     <>
@@ -173,15 +148,7 @@ export const EditCustomer: React.FC<IProps> = ({initialRef, finalRef, isOpen, on
 
             <FormControl mt={4}>
               <FormLabel>Autos</FormLabel>
-              <Upload
-                action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                listType="picture-card"
-                // fileList={fileList}
-                // onPreview={handlePreview}
-                // onChange={handleChange}
-              >
-                {fileList.length >= 8 ? null : uploadButton}
-              </Upload>
+              
             </FormControl>
 
           </ModalBody>
