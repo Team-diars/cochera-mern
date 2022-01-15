@@ -20,4 +20,3 @@ app.use(express_1.default.json());
 app.use("/api/", require("./routes/auth"));
 app.use("/api/user", require("./routes/user"));
 app.use("/api/customer", require("./routes/customer"));
-app.use("/api/car", require("./routes/car"));
