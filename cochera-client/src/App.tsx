@@ -7,6 +7,7 @@ import { Provider } from 'react-redux';
 import {store} from './state/store';
 import {AppContextProvider} from './context/PopupContext';
 import './index.css';
+import { CardsScreen } from './components/Car/CarsScreen';
 function App() {
   return (
     <Provider store={store}>
@@ -16,7 +17,7 @@ function App() {
             <SidebarSreen/>
             <Routes>
               <Route path='/customer' element={<CustomerScreen/>}/>
-              <Route path='/cars/:customerid/' element={<CustomerScreen/>}/>
+              <Route path='/cars/:customerid' element={<CardsScreen/>}/>
             </Routes>
           </Router>
         </ChakraProvider>

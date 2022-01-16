@@ -1,6 +1,6 @@
 import React from 'react'
 
-export const Cars: React.FC = () => {
+export const AddCar: React.FC = () => {
   return (
     <div>
       

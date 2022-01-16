@@ -40,8 +40,7 @@ export const CustomerScreen: React.FC = () => {
             Clientes
           </Text>
         </Box>
-        <Button colorScheme="blue" onClick={onOpen}>
-          <Icon as={FiPlus} h={[4, 6]} w={[4, 6]} alignSelf={"center"} />
+        <Button colorScheme="blue" onClick={onOpen} leftIcon={<Icon as={FiPlus} h={[4, 6]} w={[4, 6]} alignSelf={"center"} />}>
           Nuevo Cliente 
         </Button>
       </Box>

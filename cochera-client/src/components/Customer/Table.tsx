@@ -14,6 +14,7 @@ import { default as dayjs } from 'dayjs';
 import { DateFormat } from '../../utils/Date';
 import MaterialTable, { Icons } from 'material-table'
 import { localizationTable, optionsTable, headerStyle, cellStyle } from '../../utils/Table';
+import { Link } from 'react-router-dom';
 
 
 export const ActionsButton = forwardRef(({ label, ...rest }, ref) => {
@@ -37,7 +38,7 @@ export const ActionsButton = forwardRef(({ label, ...rest }, ref) => {
   );
 });
 
-export const CustomerTable = () => {
+export const CustomerTable: React.FC = () => {
   const data: CustomerState = useSelector((state: RootState) => state.customers);
   const dispatch = useDispatch();
   const {contextActions: {setIsOpen, setIdSelected}, contextState: {isOpen: isEditPopupOpen, idSelected}} = useSelectedContext();
@@ -74,15 +75,17 @@ export const CustomerTable = () => {
         { title: 'Registrado', field: 'date', render: (rowData: Payload) => {
           return <DateFormat position="relative" date={rowData.date}/>
         }, headerStyle, cellStyle},
-        { title: 'Carros', field: 'cars', render: () => {
+        { title: 'Carros', field: 'cars', render: (rowData: Payload) => {
           return <Tooltip label='Ver Carros' bg='gray.300' color='black'>
-            <Button size="sm" colorScheme="gray">
-              <Icon
-                as={AiFillCar}
-                h={[4]}
-                w={[4]}
-              />
-            </Button>
+            <Link to={`/cars/${rowData.id}`}>
+              <Button size="sm" colorScheme="gray">
+                <Icon
+                  as={AiFillCar}
+                  h={[4]}
+                  w={[4]}
+                />
+              </Button>
+            </Link>
           </Tooltip>
         }, headerStyle, cellStyle },
         { title: 'Acciones', field: 'actions', render: (rowData: Payload) => {
