@@ -4,16 +4,7 @@ import Icon from '@chakra-ui/icon';
 import { Box, Container, Heading, Text } from '@chakra-ui/layout';
 import React, { useEffect, useRef, useState } from 'react'
 
-import {
-  FiCheck,
-  FiEdit,
-  FiFile,
-  FiMoreVertical,
-  FiPlus,
-  FiTrash2,
-  FiX,
-  FiXCircle,
-} from "react-icons/fi";
+import { FiPlus } from "react-icons/fi";
 import { useSelectedContext } from '../../context/PopupContext';
 import { AddCustomer } from './AddCustomer';
 import { EditCustomer } from './EditCustomer';

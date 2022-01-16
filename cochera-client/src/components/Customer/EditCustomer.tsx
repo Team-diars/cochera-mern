@@ -135,10 +135,10 @@ export const EditCustomer: React.FC<IProps> = ({initialRef, finalRef, isOpen, on
 
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme='blue' mr={3} onClick={onClosePopup}>
+            <Button mr={3} onClick={onClosePopup}>
               Cerrar
             </Button>
-            <Button variant='ghost' onClick={(e) => editCustomer(formData)}>Guardar</Button>
+            <Button colorScheme='blue' onClick={(e) => editCustomer(formData)}>Guardar</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

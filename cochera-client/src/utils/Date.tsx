@@ -35,7 +35,7 @@ export const DateFormat = forwardRef(function DateFormat({ date = new Date(), fo
   }, [date]);
 
   return (
-    <Tooltip ref={ref} label={dayjsDate.format(format ?? "DD/MM/YYYY")} placement="top-start" bg='gray.300' color='black'>
+    <Tooltip ref={ref} label={dayjsDate.format(format ?? "DD/MM/YYYY")} placement="top-start" bg='gray.300' color='black' hasArrow>
       <Text>{dayjsDate.fromNow() || dayjsDate.format(format ?? "DD/MM/YYYY")}</Text>
     </Tooltip>
   );

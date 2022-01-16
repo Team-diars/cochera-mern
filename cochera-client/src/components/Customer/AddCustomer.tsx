@@ -81,34 +81,32 @@ export const AddCustomer: React.FC<IProps> = ({initialRef, finalRef, isOpen, onC
   console.log("state.customers: ",state.customers);
   
   return (
-    <>
-      <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose} motionPreset='slideInBottom' size={'md'}>
-        <ModalOverlay />
-        <ModalContent >
-          <ModalHeader size='3xl'>Agregar Cliente</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <FormControl isRequired>
-              <FormLabel>Nombre Completo</FormLabel>
-              <Input ref={initialRef} placeholder='Nombre Completo' name="fullname" onChange={(e) => onChange(e)} value={fullname}/>
-            </FormControl>
-            <FormControl isRequired mt={4}>
-              <FormLabel>Telefono</FormLabel>
-              <Input placeholder='Telefono' name="cellphone" onChange={(e) => onChange(e)} value={cellphone}/>
-            </FormControl>
-            <FormControl isRequired mt={4}>
-              <FormLabel>Direccion</FormLabel>
-              <Input placeholder='Direccion' name="address" onChange={(e) => onChange(e)} value={address}/>
-            </FormControl>
-          </ModalBody>
-          <ModalFooter>
-            <Button mr={3} onClick={onClose}>
-              Cerrar
-            </Button>
-            <Button colorScheme='blue' onClick={(e) => saveCustomer(e)}>Guardar</Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-    </>
+    <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose} motionPreset='slideInBottom' size={'md'}>
+      <ModalOverlay />
+      <ModalContent >
+        <ModalHeader size='3xl'>Agregar Cliente</ModalHeader>
+        <ModalCloseButton />
+        <ModalBody>
+          <FormControl isRequired>
+            <FormLabel>Nombre Completo</FormLabel>
+            <Input ref={initialRef} placeholder='Nombre Completo' name="fullname" onChange={(e) => onChange(e)} value={fullname}/>
+          </FormControl>
+          <FormControl isRequired mt={4}>
+            <FormLabel>Telefono</FormLabel>
+            <Input placeholder='Telefono' name="cellphone" onChange={(e) => onChange(e)} value={cellphone}/>
+          </FormControl>
+          <FormControl isRequired mt={4}>
+            <FormLabel>Direccion</FormLabel>
+            <Input placeholder='Direccion' name="address" onChange={(e) => onChange(e)} value={address}/>
+          </FormControl>
+        </ModalBody>
+        <ModalFooter>
+          <Button mr={3} onClick={onClose}>
+            Cerrar
+          </Button>
+          <Button colorScheme='blue' onClick={(e) => saveCustomer(e)}>Guardar</Button>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
   )
 }

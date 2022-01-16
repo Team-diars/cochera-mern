@@ -2,7 +2,7 @@ import { Button } from '@chakra-ui/button';
 import { useDisclosure } from '@chakra-ui/hooks';
 import Icon from '@chakra-ui/icon';
 import { Box, Container, Grid, Text } from '@chakra-ui/layout';
-import React from 'react'
+import React, { useRef } from 'react'
 import { useNavigate } from "react-router-dom";
 import { FiPlus } from 'react-icons/fi';
 import { MdArrowBack } from 'react-icons/md';
@@ -11,11 +11,14 @@ import { useParams } from 'react-router';
 import { RootState } from '../../state';
 import { CustomerState } from '../../state/actions/customer';
 import { CarCard } from './CarCard';
+import { AddCar } from './AddCar';
 
 export const CardsScreen: React.FC = () => {
   const {customerid} = useParams();
   const navigate = useNavigate();
   const data: CustomerState = useSelector((state: RootState) => state.customers);
+  const initialRef = useRef<HTMLInputElement>(null)
+  const finalRef = useRef<HTMLHeadingElement>(null)
   const { isOpen, onOpen, onClose } = useDisclosure()
   const customer = data.customers.find(customer => customer.id === customerid);
   return (
@@ -39,10 +42,14 @@ export const CardsScreen: React.FC = () => {
         </Box>
       </Box>
       <Grid templateColumns='repeat(3, 1fr)' gap={6}>
-        <CarCard image={""}/>
-        <CarCard image={""}/>
-        <CarCard image={""}/>
+        <CarCard image={"image-1642280809448.png"} color={"#4232"}/>
+        <CarCard image={""} color={"#fff"}/>
+        <CarCard image={""} color={"#000"}/>
+        <CarCard image={""} color={"#442345"}/>
       </Grid>
+      {
+        (isOpen) && <AddCar initialRef={initialRef} finalRef={finalRef} isOpen={isOpen} onClose={onClose}/>
+      }
     </Container>
   )
 }
