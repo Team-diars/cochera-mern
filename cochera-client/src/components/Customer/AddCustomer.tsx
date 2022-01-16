@@ -1,20 +1,16 @@
-import { Button } from '@chakra-ui/button'
+import { Button, IconButton } from '@chakra-ui/button'
 import { FormControl, FormLabel } from '@chakra-ui/form-control'
 import { useDisclosure } from '@chakra-ui/hooks'
 import { Input, InputGroup, InputLeftElement } from '@chakra-ui/input'
 import { Box, Text } from '@chakra-ui/layout'
-import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from '@chakra-ui/modal'
-import { OmitCommonProps } from '@chakra-ui/system'
-import { message, Upload } from 'antd'
+import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useModal } from '@chakra-ui/modal'
 import React, {LegacyRef, RefObject, useRef, useState} from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { RootState } from '../state'
-import { addCustomer } from '../state/action-creators'
-import { CustomerState, Payload } from '../state/actions/customer'
-import axios, { AxiosError, AxiosResponse } from "axios";
-import { FiFile } from 'react-icons/fi'
-import { Spinner } from '@chakra-ui/spinner'
-import { Image } from '@chakra-ui/image'
+import { RootState } from '../../state/index'
+import { addCustomer } from '../../state/action-creators'
+import { CustomerState, Payload, Car } from '../../state/actions/customer'
+import axios, { AxiosError } from "axios";
+
 
 interface IProps {
   initialRef: LegacyRef<HTMLInputElement>,
@@ -25,6 +21,8 @@ interface IProps {
 
 export const AddCustomer: React.FC<IProps> = ({initialRef, finalRef, isOpen, onClose}) => {
   const state: CustomerState = useSelector((state: RootState) => state.customers);
+  const [carsCounter, setCarsCounter] = useState(1);
+  const [cars, setCars] = useState<Array<Car>>([]);
   const [formData, setFormData] = useState<Payload>({
     id: "",
     fullname: "",
@@ -39,7 +37,6 @@ export const AddCustomer: React.FC<IProps> = ({initialRef, finalRef, isOpen, onC
   const [image, setImage] = useState("");
 
   const uploadFileHandler = async (e: any) => {
-    e.preventDefault();
     // console.log("Imagen:", e.currentTarget.files[0]);
     const file = e.target.files[0];
     if (file) {
@@ -82,84 +79,33 @@ export const AddCustomer: React.FC<IProps> = ({initialRef, finalRef, isOpen, onC
   }
   
   console.log("state.customers: ",state.customers);
+  
   return (
     <>
-      <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
+      <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose} motionPreset='slideInBottom' size={'md'}>
         <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Agregar Cliente</ModalHeader>
+        <ModalContent >
+          <ModalHeader size='3xl'>Agregar Cliente</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <FormControl>
+            <FormControl isRequired>
               <FormLabel>Nombre Completo</FormLabel>
               <Input ref={initialRef} placeholder='Nombre Completo' name="fullname" onChange={(e) => onChange(e)} value={fullname}/>
             </FormControl>
-
-            <FormControl mt={4}>
+            <FormControl isRequired mt={4}>
               <FormLabel>Telefono</FormLabel>
               <Input placeholder='Telefono' name="cellphone" onChange={(e) => onChange(e)} value={cellphone}/>
             </FormControl>
-
-            <FormControl mt={4}>
+            <FormControl isRequired mt={4}>
               <FormLabel>Direccion</FormLabel>
               <Input placeholder='Direccion' name="address" onChange={(e) => onChange(e)} value={address}/>
             </FormControl>
-
-            <FormControl mt={4}>
-              <FormLabel>Autos</FormLabel>
-              <InputGroup>
-                  <InputLeftElement
-                    pointerEvents="none"
-                    children={<FiFile />}
-                  />
-                  <Input
-                    type="file"
-                    accept="image/*"
-                    // ref={imageRef}
-                    onChange={uploadFileHandler}
-                    // style={{ display: "none" }}
-                  ></Input>
-                  {/* <Input
-                    onClick={() => imageRef.current.click()}
-                    value={image}
-                    isReadOnly
-                  /> */}
-                </InputGroup>
-                <Box
-                  mt="1"
-                  py="1"
-                  px="2"
-                  textAlign="center"
-                  style={{ background: "#eee" }}
-                >
-                  <Text
-                    fontWeight="semibold"
-                    style={{ display: (uploading || image) && "none" }}
-                  >
-                    No hay imagen previa
-                  </Text>
-                  {!uploading ? (
-                    image && (
-                      <Image
-                        marginX="auto"
-                        borderRadius="full"
-                        boxSize="50px"
-                        src={`/images/${image}`}
-                        alt="Imagen"
-                      />
-                    )
-                  ) : (
-                    <Spinner label="cargando" speed="0.65s" size="md" />
-                  )}
-                </Box>
-            </FormControl>
-
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme='blue' mr={3} onClick={onClose}>
+            <Button mr={3} onClick={onClose}>
               Cerrar
             </Button>
-            <Button variant='ghost' onClick={(e) => saveCustomer(e)}>Guardar</Button>
+            <Button colorScheme='blue' onClick={(e) => saveCustomer(e)}>Guardar</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

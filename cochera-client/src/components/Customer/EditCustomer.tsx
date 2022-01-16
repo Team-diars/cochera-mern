@@ -4,12 +4,11 @@ import { Input } from '@chakra-ui/input'
 import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from '@chakra-ui/modal'
 import React, {LegacyRef, useEffect, useState} from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useSelectedContext } from '../context/PopupContext'
-import { RootState } from '../state'
-import { addCustomer, updateCustomer } from '../state/action-creators'
-import { CustomerState, Payload } from '../state/actions/customer'
-import { Progress, Spin, Upload } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
+import { useSelectedContext } from '../../context/PopupContext'
+import { RootState } from '../../state'
+import { addCustomer, updateCustomer } from '../../state/action-creators'
+import { CustomerState, Payload } from '../../state/actions/customer'
+import { CircularProgress } from '@chakra-ui/progress'
 
 function getBase64(file: Blob | undefined) {
   return new Promise((resolve, reject) => {
@@ -101,28 +100,6 @@ export const EditCustomer: React.FC<IProps> = ({initialRef, finalRef, isOpen, on
     }
   },[state.customer])
   
-
-  const processRemainingFiles = async () => {
-    let file = remainingFiles[0];
-    //await uploadFile(file);
-    console.log("[uploadFile]", file);
-    setUploadedFiles([...uploadedFiles, file]);
-    setRemainingFiles(remainingFiles.filter((x: any) => x !== file));
-  };
-
-  useEffect(() => {
-    if (remainingFiles.length > 0) {
-      //uploadFile();
-    } else {
-      console.log("[useEffect] Finished.");
-      setUploading(false);
-    }
-  }, [remainingFiles]);
-
-  let percent = Math.round(
-    (uploadedFiles.length / (uploadedFiles.length + remainingFiles.length)) *
-      100
-  );
   return (
     <>
       <Modal finalFocusRef={finalRef} isOpen={true} onClose={onClosePopup}>
@@ -131,25 +108,30 @@ export const EditCustomer: React.FC<IProps> = ({initialRef, finalRef, isOpen, on
           <ModalHeader>Editar Cliente</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <FormControl>
-              <FormLabel>Nombre Completo</FormLabel>
-              <Input ref={initialRef} placeholder='Nombre Completo' name="fullname" onChange={(e) => onChange(e)} value={fullname}/>
-            </FormControl>
+            {
+              (state.loading) ? <CircularProgress isIndeterminate color='green.300' /> : (
+                <>
+                  <FormControl>
+                    <FormLabel>Nombre Completo</FormLabel>
+                    <Input ref={initialRef} placeholder='Nombre Completo' name="fullname" onChange={(e) => onChange(e)} value={fullname}/>
+                  </FormControl>
 
-            <FormControl mt={4}>
-              <FormLabel>Telefono</FormLabel>
-              <Input placeholder='Telefono' name="cellphone" onChange={(e) => onChange(e)} value={cellphone}/>
-            </FormControl>
+                  <FormControl mt={4}>
+                    <FormLabel>Telefono</FormLabel>
+                    <Input placeholder='Telefono' name="cellphone" onChange={(e) => onChange(e)} value={cellphone}/>
+                  </FormControl>
 
-            <FormControl mt={4}>
-              <FormLabel>Direccion</FormLabel>
-              <Input placeholder='Direccion' name="address" onChange={(e) => onChange(e)} value={address}/>
-            </FormControl>
+                  <FormControl mt={4}>
+                    <FormLabel>Direccion</FormLabel>
+                    <Input placeholder='Direccion' name="address" onChange={(e) => onChange(e)} value={address}/>
+                  </FormControl>
 
-            <FormControl mt={4}>
-              <FormLabel>Autos</FormLabel>
-              
-            </FormControl>
+                  <FormControl mt={4}>
+                    <FormLabel>Autos</FormLabel>
+                  </FormControl>
+                </>
+              )
+            }
 
           </ModalBody>
           <ModalFooter>

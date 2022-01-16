@@ -14,7 +14,7 @@ import {
   FiX,
   FiXCircle,
 } from "react-icons/fi";
-import { useSelectedContext } from '../context/PopupContext';
+import { useSelectedContext } from '../../context/PopupContext';
 import { AddCustomer } from './AddCustomer';
 import { EditCustomer } from './EditCustomer';
 import { CustomerTable } from './Table';
@@ -31,11 +31,12 @@ export const CustomerScreen: React.FC = () => {
   console.log("isEditPopupOpen: ",isEditPopupOpen);
   return (
     <Container maxW='container.xl' padding="10">
-      <Box display="flex" justifyContent="space-between" alignItems="center">
-        <Box p='2'>
-          <Text fontSize="2xl"
+      <Box display="flex" justifyContent="space-between" alignItems="center" mb={5}>
+        <Box >
+          <Text fontSize="3xl"
                 fontWeight="bold"
-                lineHeight="short">
+                lineHeight="short"
+                >
             Clientes
           </Text>
         </Box>

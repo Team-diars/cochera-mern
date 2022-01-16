@@ -1,7 +1,7 @@
 import { ActionType } from "../action-types";
 import {Error} from './index'
 
-interface Car {
+export interface Car {
   brand: string,
   model: string,
   licenceplate: string,

@@ -1,4 +1,4 @@
-import CustomerScreen from './components/CustomerScreen';
+import CustomerScreen from './components/Customer/CustomerScreen';
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom'
 import { ChakraProvider } from '@chakra-ui/react';
 import theme from './config/theme';
@@ -15,6 +15,7 @@ function App() {
             <SidebarSreen/>
             <Routes>
               <Route path='/customer' element={<CustomerScreen/>}/>
+              <Route path='/cars/:customerid/' element={<CustomerScreen/>}/>
             </Routes>
           </Router>
         </ChakraProvider>
