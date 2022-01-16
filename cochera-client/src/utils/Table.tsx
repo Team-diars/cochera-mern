@@ -1,4 +1,5 @@
-import { Options } from "material-table"
+import { CSSProperties } from "@material-ui/styles"
+import { Column, MaterialTableProps, Options } from "material-table"
 
 
 const optionsTable: Options<any> = {
@@ -21,7 +22,43 @@ const optionsTable: Options<any> = {
     padding:0,
   },
 }
+const localizationTable = {
+  pagination: {
+    labelRowsSelect: 'filas',
+    labelDisplayedRows: '{count} de {from}-{to}',
+    firstTooltip: 'Primera Pagina',
+    previousTooltip: 'Pagina Anterior',
+    nextTooltip: 'Siguiente Pagina',
+    lastTooltip: 'Ultima Pagina'
+  },
+  toolbar: {
+      nRowsSelected: '{0} filas seleccionadas',
+      searchPlaceholder: "Buscar"
+  },
+  header: {
+      actions: 'Acciones'
+  },
+  body: {
+      emptyDataSourceMessage: 'No hay clientes',
+      filterRow: {
+          filterTooltip: 'Filtrar'
+      }
+  }
+}
+
+const headerStyle = {
+  backgroundColor: '#edf2f7',
+  color: '#4d7ca1',
+  height: 10,
+}
+const cellStyle: any = {
+  textAlign:"left",
+  padding: "8px 12px"
+}
 
 export {
-  optionsTable
+  optionsTable,
+  localizationTable,
+  headerStyle,
+  cellStyle
 }

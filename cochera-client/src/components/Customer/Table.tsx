@@ -13,7 +13,7 @@ import { useSelectedContext } from '../../context/PopupContext';
 import { default as dayjs } from 'dayjs';
 import { DateFormat } from '../../utils/Date';
 import MaterialTable, { Icons } from 'material-table'
-import { optionsTable } from '../../utils/Table';
+import { localizationTable, optionsTable, headerStyle, cellStyle } from '../../utils/Table';
 
 
 export const ActionsButton = forwardRef(({ label, ...rest }, ref) => {
@@ -63,175 +63,50 @@ export const CustomerTable = () => {
   },[idSelected])
   
   console.log("idSelected: ",idSelected);
-  
-  return (
-    <>
-      <MaterialTable 
-          options={optionsTable}
-          localization={{
-            pagination: {
-              labelRowsSelect: 'filas',
-              labelDisplayedRows: '{count} de {from}-{to}',
-              firstTooltip: 'Primera Pagina',
-              previousTooltip: 'Pagina Anterior',
-              nextTooltip: 'Siguiente Pagina',
-              lastTooltip: 'Ultima Pagina'
-            },
-            toolbar: {
-                nRowsSelected: '{0} filas seleccionadas',
-                searchPlaceholder: "Buscar"
-            },
-            header: {
-                actions: 'Acciones'
-            },
-            body: {
-                emptyDataSourceMessage: 'No hay clientes',
-                filterRow: {
-                    filterTooltip: 'Filtrar'
-                }
-            }
-          }}
-          columns={[
-          { title: 'Nombre', field: 'fullname', headerStyle: {
-            backgroundColor: '#edf2f7',
-            color: '#4d7ca1',
-            height: 10,
-          }, cellStyle:{
-            textAlign:"left",
-            padding: "8px 12px"
-          }},
-          { title: 'Telefono', field: 'cellphone', type: 'numeric', headerStyle: {
-            backgroundColor: '#edf2f7',
-            color: '#4d7ca1',
-            height: 10
-          }, cellStyle:{
-            textAlign:"left",
-            padding: "8px 12px"
-          } },
-          { title: 'Direccion', field: 'address', headerStyle: {
-            backgroundColor: '#edf2f7',
-            color: '#4d7ca1',
-            height: 10
-          }, cellStyle:{
-            textAlign:"left",
-            padding: "8px 12px"
-          } },
-          { title: 'Registrado', field: 'date', render: (rowData: Payload) => {
-            return <DateFormat position="relative" date={rowData.date}/>
-          } , headerStyle: {
-            backgroundColor: '#edf2f7',
-            color: '#4d7ca1',
-            height: 10
-          }, cellStyle:{
-            textAlign:"left",
-            padding: "8px 12px"
-          }},
-          { title: 'Carros', field: 'cars', render: () => {
-            return <Tooltip label='Ver Carros' bg='gray.300' color='black'>
-              <Button size="sm" colorScheme="gray">
-                <Icon
-                  as={AiFillCar}
-                  h={[4]}
-                  w={[4]}
-                />
-              </Button>
-            </Tooltip>
-          }, headerStyle: {
-            backgroundColor: '#edf2f7',
-            color: '#4d7ca1',
-            height: 10
-          }, cellStyle:{
-            textAlign:"left",
-            padding: "8px 12px"
-          } },
-          { title: 'Acciones', field: 'actions', render: (rowData: Payload) => {
-              return <Menu isLazy placement="left-start">
-                <MenuButton as={ActionsButton}>
-                </MenuButton>
-                <Portal>
-                  <MenuList>
-                    <MenuItem
-                      icon={<FiEdit />} 
-                      onClick={() => updateCustomer(rowData.id)}> 
-                      Editar
-                    </MenuItem>
-                    <MenuItem
-                      icon={<FiXCircle />} 
-                      onClick={() => removeCustomer(rowData.id)}>
-                      Eliminar
-                    </MenuItem>
-                  </MenuList>
-                </Portal>
-              </Menu>
-          }, headerStyle: {
-            backgroundColor: '#edf2f7',
-            color: '#4d7ca1',
-            height: 10
-          }, cellStyle:{
-            textAlign:"left",
-            padding: "8px 12px"
-          } },
-          ]}
-          data={data.customers}
-          />
-          
-    {/* <Table size='sm' mt="10" variant='simple' colorScheme='gray' border='1px' borderColor='gray.200'>
-        <Thead>
-          <Tr>
-            <Th>Nombre</Th>
-            <Th>Telefono</Th>
-            <Th>Direccion</Th>
-            <Th>Registrado</Th>
-            <Th>Carros</Th>
-            <Th>Acciones</Th>
-          </Tr>
-        </Thead>
-        <Tbody>
-          {
-           (!data.loading) && data.customers.map((customer) => (
-            <Tr key={customer.id}>
-              <Td>{customer.fullname}</Td>
-              <Td>{customer.cellphone}</Td>
-              <Td>{customer.address}</Td>
-              <Td>
-                <DateFormat position="relative" date={customer.date}/>
-              </Td>
-              <Td>
-              <Tooltip label='Ver Carros' bg='gray.300' color='black'>
-                  <Button size="sm" colorScheme="gray">
-                    <Icon
-                      as={AiFillCar}
-                      h={[4]}
-                      w={[4]}
-                    />
-                  </Button>
-              </Tooltip>
-              </Td>
-              <Td>
-                <Menu isLazy placement="left-start">
-                  <MenuButton as={ActionsButton}>
-                  </MenuButton>
-                  <Portal>
-                    <MenuList>
-                      <MenuItem
-                        icon={<FiEdit />} 
-                        onClick={() => updateCustomer(customer.id)}> 
-                        Editar
-                      </MenuItem>
-                      <MenuItem
-                        icon={<FiXCircle />} 
-                        onClick={() => removeCustomer(customer.id)}>
-                        Eliminar
-                      </MenuItem>
-                    </MenuList>
-                  </Portal>
-                </Menu>
-              </Td>
-            </Tr>
-           )) 
-          }
-        </Tbody>
-      </Table> */}
-    </>
+  return ( 
+    <MaterialTable 
+        options={optionsTable}
+        localization={localizationTable}
+        columns={[
+        { title: 'Nombre', field: 'fullname', headerStyle, cellStyle},
+        { title: 'Telefono', field: 'cellphone', type: 'numeric', headerStyle, cellStyle},
+        { title: 'Direccion', field: 'address', headerStyle, cellStyle},
+        { title: 'Registrado', field: 'date', render: (rowData: Payload) => {
+          return <DateFormat position="relative" date={rowData.date}/>
+        }, headerStyle, cellStyle},
+        { title: 'Carros', field: 'cars', render: () => {
+          return <Tooltip label='Ver Carros' bg='gray.300' color='black'>
+            <Button size="sm" colorScheme="gray">
+              <Icon
+                as={AiFillCar}
+                h={[4]}
+                w={[4]}
+              />
+            </Button>
+          </Tooltip>
+        }, headerStyle, cellStyle },
+        { title: 'Acciones', field: 'actions', render: (rowData: Payload) => {
+            return <Menu isLazy placement="left-start">
+              <MenuButton as={ActionsButton}>
+              </MenuButton>
+              <Portal>
+                <MenuList>
+                  <MenuItem
+                    icon={<FiEdit />} 
+                    onClick={() => updateCustomer(rowData.id)}> 
+                    Editar
+                  </MenuItem>
+                  <MenuItem
+                    icon={<FiXCircle />} 
+                    onClick={() => removeCustomer(rowData.id)}>
+                    Eliminar
+                  </MenuItem>
+                </MenuList>
+              </Portal>
+            </Menu>
+        }, headerStyle, cellStyle},
+        ]}
+        data={data.customers}
+    />    
   )
 }
