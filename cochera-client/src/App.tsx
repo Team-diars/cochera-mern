@@ -6,6 +6,7 @@ import { SidebarSreen } from './components/Sidebar/SidebarSreen';
 import { Provider } from 'react-redux';
 import {store} from './state/store';
 import {AppContextProvider} from './context/PopupContext';
+import './index.css';
 function App() {
   return (
     <Provider store={store}>

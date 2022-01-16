@@ -13,6 +13,7 @@ import { useSelectedContext } from '../../context/PopupContext';
 import { default as dayjs } from 'dayjs';
 import { DateFormat } from '../../utils/Date';
 import MaterialTable, { Icons } from 'material-table'
+import { optionsTable } from '../../utils/Table';
 
 
 export const ActionsButton = forwardRef(({ label, ...rest }, ref) => {
@@ -66,27 +67,7 @@ export const CustomerTable = () => {
   return (
     <>
       <MaterialTable 
-          options={{
-            search: false,
-            selection: false,
-            showTitle: false,
-            toolbar: false,
-            paging: true,
-            headerStyle:{
-              fontFamily: 'inherit',
-              fontSize:14,
-              paddingTop:5,
-              paddingBottom:5,
-              textAlign:"left",
-              fontWeight:"bold"
-            },
-            rowStyle: {
-              fontFamily: 'inherit',
-              textAlign:"left",
-              padding:0,
-            },
-          }}
-          
+          options={optionsTable}
           localization={{
             pagination: {
               labelRowsSelect: 'filas',
