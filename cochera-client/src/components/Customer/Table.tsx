@@ -10,9 +10,8 @@ import { deleteCustomer, getCustomers, getSingleCustomer, updateCustomer } from 
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../state';
 import { useSelectedContext } from '../../context/PopupContext';
-import { default as dayjs } from 'dayjs';
 import { DateFormat } from '../../utils/Date';
-import MaterialTable, { Icons } from 'material-table'
+import MaterialTable from '@material-table/core'
 import { localizationTable, optionsTable, headerStyle, cellStyle } from '../../utils/Table';
 import { Link } from 'react-router-dom';
 
@@ -76,7 +75,7 @@ export const CustomerTable: React.FC = () => {
           return <DateFormat position="relative" date={rowData.date}/>
         }, headerStyle, cellStyle},
         { title: 'Carros', field: 'cars', render: (rowData: Payload) => {
-          return <Tooltip label='Ver Carros' bg='gray.300' color='black'>
+          return <Tooltip label='Ver Carros' bg='gray.300' color='black' hasArrow>
             <Link to={`/cars/${rowData.id}`}>
               <Button size="sm" colorScheme="gray">
                 <Icon
