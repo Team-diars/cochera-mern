@@ -1,12 +1,16 @@
 import { Button } from '@chakra-ui/button'
-import { FormControl, FormLabel } from '@chakra-ui/form-control'
-import { Input } from '@chakra-ui/input'
+import { FormControl, FormErrorMessage, FormLabel } from '@chakra-ui/form-control'
+import { Input, InputGroup, InputLeftElement } from '@chakra-ui/input'
 import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from '@chakra-ui/modal'
-import React, { LegacyRef, useState } from 'react'
-import { Car } from '../../state/actions/customer'
+import React, { LegacyRef, useRef, useState } from 'react'
+import { Car } from '../../state/actions/car'
 import { ChromePicker, SketchPicker } from 'react-color';
 import reactCSS from 'reactcss'
-import { Box } from '@chakra-ui/layout'
+import { Box, Text } from '@chakra-ui/layout'
+import axios, { AxiosError } from 'axios'
+import { FiImage } from 'react-icons/fi'
+import { Image } from '@chakra-ui/image'
+import { Spinner } from '@chakra-ui/spinner'
 var { EditableInput } = require('react-color/lib/components/common');
 
 interface CarProps {
@@ -24,10 +28,12 @@ export const AddCar: React.FC<CarProps> = ({initialRef, finalRef, isOpen, onClos
     licenceplate:"",
     color: "#000"
   })
+  const imageRef = useRef<any>(null);
+  const [uploading, setUploading] = useState(false);
+  // const [image, setImage] = useState("");
   const {image, brand, color, licenceplate, model} = formData;
   const [picker, setPicker] = useState({
     displayColorPicker: false,
-    color: "#fff",
   })
   const saveCar = (e: any) => {
 
@@ -64,18 +70,20 @@ export const AddCar: React.FC<CarProps> = ({initialRef, finalRef, isOpen, onClos
   const styles = reactCSS({
     'default': {
       color: {
-        width: '36px',
-        height: '14px',
+        width: '100%',
+        height: '40px',
         borderRadius: '2px',
         background: `${color}`,
       },
       swatch: {
         padding: '5px',
         background: '#fff',
-        borderRadius: '1px',
         boxShadow: '0 0 0 1px rgba(0,0,0,.1)',
         display: 'inline-block',
         cursor: 'pointer',
+        border: "1px solid #ccc",
+        borderRadius: '5px',
+        width:"100%"
       },
       popover: {
         position: 'absolute',
@@ -90,36 +98,123 @@ export const AddCar: React.FC<CarProps> = ({initialRef, finalRef, isOpen, onClos
       } as React.CSSProperties,
     },
   });
+  const uploadFileHandler = async (e: any) => {
+    // console.log("Imagen:", e.currentTarget.files[0]);
+    const file = e.target.files[0];
+    if (file) {
+      const form = new FormData();
+      form.append("image", file);
+      setUploading(true);
+      const config = {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      };
+      try {
+        const { data } = await axios.post("http://localhost:8000/api/upload", form, config);
+        console.log("data: ",data);
+        const {image:CarImage, ...rest} = formData;
+        setFormData({
+          image: [data],
+          ...rest
+        })
+        setUploading(false);
+      } catch (error) {
+        let err = error as AxiosError;
+        if (err.response){
+          console.error(err.response);
+        }
+        setUploading(false);
+      }
+    }
+  };
   return (
     <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose} motionPreset='slideInBottom' size={'md'}>
       <ModalOverlay />
-      <ModalContent >
+      <ModalContent maxW="56rem">
         <ModalHeader size='3xl'>Agregar Carro</ModalHeader>
         <ModalCloseButton />
-        <ModalBody>
-          <FormControl isRequired>
-            <FormLabel>Marca</FormLabel>
-            <Input ref={initialRef} placeholder='Marca' name="brand" onChange={(e) => onChange(e)} value={brand}/>
-          </FormControl>
-          <FormControl isRequired mt={4}>
-            <FormLabel>Modelo</FormLabel>
-            <Input placeholder='Modelo' name="model" onChange={(e) => onChange(e)} value={model}/>
-          </FormControl>
-          <FormControl isRequired mt={4}>
-            <FormLabel>Placa</FormLabel>
-            <Input placeholder='Placa del auto' name="licenceplate" onChange={(e) => onChange(e)} value={licenceplate}/>
-          </FormControl>
-          <FormControl isRequired mt={4}>
-            <FormLabel>Color</FormLabel>
-            <Box style={ styles.swatch } onClick={ handleOpenPicker }>
-              <Box style={ styles.color } />
-            </Box>
-            { picker.displayColorPicker ? 
-              <Box style={ styles.popover }>
-                <Box style={ styles.cover } onClick={ handleClosePicker }/>
-                <SketchPicker color={ color } onChange={ handleChangeComplete } />
-              </Box> : null }
-          </FormControl>
+        <ModalBody display="flex" justifyContent="space-between">
+          <Box w="50%" mr={3}>
+            <FormControl isRequired>
+              <FormLabel>Marca</FormLabel>
+              <Input ref={initialRef} placeholder='Marca' name="brand" onChange={(e) => onChange(e)} value={brand}/>
+            </FormControl>
+            <FormControl isRequired mt={4}>
+              <FormLabel>Modelo</FormLabel>
+              <Input placeholder='Modelo' name="model" onChange={(e) => onChange(e)} value={model}/>
+            </FormControl>
+            <FormControl isRequired mt={4}>
+              <FormLabel>Placa</FormLabel>
+              <Input placeholder='Placa del auto' name="licenceplate" onChange={(e) => onChange(e)} value={licenceplate}/>
+            </FormControl>
+            <FormControl mt={4}>
+              <FormLabel>Color</FormLabel>
+              <Box style={ styles.swatch } onClick={ handleOpenPicker }>
+                <Box style={ styles.color } />
+              </Box>
+              { picker.displayColorPicker ? 
+                <Box style={ styles.popover }>
+                  <Box style={ styles.cover } onClick={ handleClosePicker }/>
+                  <SketchPicker color={ color } onChange={ handleChangeComplete } />
+                </Box> : null }
+            </FormControl>
+          </Box>
+          <Box w="50%">
+            <FormControl>
+              <FormLabel>Imagen</FormLabel>
+              <InputGroup>
+                <InputLeftElement
+                  pointerEvents="none"
+                  children={<FiImage />}
+                />
+                <Input
+                  type="file"
+                  accept="image/*"
+                  // name="image"
+                  ref={imageRef}
+                  // {...register("image")}
+                  // {...register("image", {
+                  //   onChange: (e) => uploadFileHandler,
+                  // })}
+                  onChange={uploadFileHandler}
+                  style={{ display: "none" }}
+                ></Input>
+                <Input
+                  onClick={() => imageRef.current.click()}
+                  value={image}
+                  isReadOnly
+                />
+              </InputGroup>
+              <Box
+                mt="1"
+                py="1"
+                px="2"
+                textAlign="center"
+                style={{ background: "#eee" }}
+                h="100%"
+              >
+                <Text
+                  fontWeight="semibold"
+                  style={{ display: (uploading || image) && "none" }}
+                >
+                  No hay imagen previa
+                </Text>
+                {!uploading ? (
+                  image && (
+                    <Image
+                      marginX="auto"
+                      src={`/images/${image}`}
+                      alt="Imagen"
+                      h={100}
+                    />
+                  )
+                ) : (
+                  <Spinner label="cargando" speed="0.65s" size="md" />
+                )}
+              </Box>
+            </FormControl>
+          </Box>
         </ModalBody>  
         <ModalFooter>
           <Button mr={3} onClick={onClose}>

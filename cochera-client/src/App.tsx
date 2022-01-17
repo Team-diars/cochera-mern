@@ -8,6 +8,7 @@ import {store} from './state/store';
 import {AppContextProvider} from './context/PopupContext';
 import './index.css';
 import { CardsScreen } from './components/Car/CarsScreen';
+import LoginScreen from './components/Login/LoginScreen';
 function App() {
   return (
     <Provider store={store}>
@@ -16,6 +17,7 @@ function App() {
           <Router>
             <SidebarSreen/>
             <Routes>
+              <Route path='/' element={<LoginScreen/>}/>
               <Route path='/customer' element={<CustomerScreen/>}/>
               <Route path='/cars/:customerid' element={<CardsScreen/>}/>
             </Routes>
