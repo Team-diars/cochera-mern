@@ -12,14 +12,10 @@ import React, { useEffect, useState } from 'react'
 import { AiFillDelete } from 'react-icons/ai'
 import { FiDelete, FiEdit, FiImage } from 'react-icons/fi'
 import { GiCancel } from 'react-icons/gi'
+import { Car } from '../../state/actions/car'
 
-interface CardProps {
-  image: string,
-  color: string
-}
 
-export const CarCard: React.FC<CardProps> = ({image, color}) => {
-  const [value, setValue] = useState<string>('')
+export const CarCard: React.FC<Car> = ({image, color, brand, model, licenceplate}) => {
   return (    
       <FormControl borderWidth="1px" p={5} borderRadius="md" background="tail" boxShadow='md' bg="white">
         <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
@@ -45,15 +41,15 @@ export const CarCard: React.FC<CardProps> = ({image, color}) => {
           }
         <Box display="flex" justifyContent="space-between" mb={2}>
           <Text fontSize='lg' fontWeight="bold">Marca</Text>
-          <Text fontSize='lg'>Toyota</Text>
+          <Text fontSize='lg'>{brand}</Text>
         </Box>
         <Box display="flex" justifyContent="space-between" mb={2}>
           <Text fontSize='lg' fontWeight="bold">Modelo</Text>
-          <Text fontSize='lg'>Hius</Text>
+          <Text fontSize='lg'>{model}</Text>
         </Box>
         <Box display="flex" justifyContent="space-between" mb={2}>
           <Text fontSize='lg' fontWeight="bold">Placa</Text>
-          <Text fontSize='lg'>ABC-123</Text>
+          <Text fontSize='lg'>{licenceplate}</Text>
         </Box>
         <Box display="flex" justifyContent="space-between" mb={2}>
           <Text fontSize='lg' fontWeight="bold">Color</Text>

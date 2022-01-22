@@ -3,7 +3,7 @@ import { FormControl, FormErrorMessage, FormLabel } from '@chakra-ui/form-contro
 import { Input, InputGroup, InputLeftElement } from '@chakra-ui/input'
 import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from '@chakra-ui/modal'
 import React, { LegacyRef, useRef, useState } from 'react'
-import { Car } from '../../state/actions/car'
+import { Car, CarState } from '../../state/actions/car'
 import { ChromePicker, SketchPicker } from 'react-color';
 import reactCSS from 'reactcss'
 import { Box, Text } from '@chakra-ui/layout'
@@ -11,6 +11,10 @@ import axios, { AxiosError } from 'axios'
 import { FiImage } from 'react-icons/fi'
 import { Image } from '@chakra-ui/image'
 import { Spinner } from '@chakra-ui/spinner'
+import { useParams } from 'react-router'
+import { RootState } from '../../state'
+import { useDispatch, useSelector } from 'react-redux'
+import { addCar } from '../../state/action-creators/car'
 var { EditableInput } = require('react-color/lib/components/common');
 
 interface CarProps {
@@ -21,8 +25,12 @@ interface CarProps {
 }
 
 export const AddCar: React.FC<CarProps> = ({initialRef, finalRef, isOpen, onClose}) => {
+  const {customerid} = useParams<string>();
+  const state: CarState = useSelector((state: RootState) => state.cars);
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState<Car>({
-    image:[],
+    id: "",
+    image:"",
     brand: "",
     model:"",
     licenceplate:"",
@@ -36,7 +44,14 @@ export const AddCar: React.FC<CarProps> = ({initialRef, finalRef, isOpen, onClos
     displayColorPicker: false,
   })
   const saveCar = (e: any) => {
-
+    e.preventDefault();
+    const {id, ...rest} = formData;
+    if(customerid) {
+      dispatch(addCar({
+        id:customerid,
+        ...rest
+      }))
+    }
   }
   const handleOpenPicker = () => {
     const {displayColorPicker, ...rest} = picker
@@ -103,6 +118,7 @@ export const AddCar: React.FC<CarProps> = ({initialRef, finalRef, isOpen, onClos
     const file = e.target.files[0];
     if (file) {
       const form = new FormData();
+      console.log("file: ",file);
       form.append("image", file);
       setUploading(true);
       const config = {
@@ -115,15 +131,15 @@ export const AddCar: React.FC<CarProps> = ({initialRef, finalRef, isOpen, onClos
         console.log("data: ",data);
         const {image:CarImage, ...rest} = formData;
         setFormData({
-          image: [data],
+          image: data,
           ...rest
         })
         setUploading(false);
       } catch (error) {
-        let err = error as AxiosError;
-        if (err.response){
-          console.error(err.response);
-        }
+        // let err = error as AxiosError;
+        // if (err.response){
+        //   console.error(err.response);
+        // }
         setUploading(false);
       }
     }
@@ -201,14 +217,13 @@ export const AddCar: React.FC<CarProps> = ({initialRef, finalRef, isOpen, onClos
                   No hay imagen previa
                 </Text>
                 {!uploading ? (
-                  image && (
+                  image && 
                     <Image
                       marginX="auto"
                       src={`/images/${image}`}
                       alt="Imagen"
-                      h={100}
+                      h={260}
                     />
-                  )
                 ) : (
                   <Spinner label="cargando" speed="0.65s" size="md" />
                 )}

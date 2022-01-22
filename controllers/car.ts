@@ -12,7 +12,10 @@ const getCars = async (req: CustomRequest<Car>, res: Response) => {
     });
   return res.status(200).json({
     ok: true,
-    cars: customer.cars,
+    cars: {
+      id,
+      ...customer.cars
+    },
   });
 };
 

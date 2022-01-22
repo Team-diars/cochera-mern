@@ -2,11 +2,12 @@ import { ActionCarType } from "../action-types/car";
 import {Error} from './index'
 
 export interface Car {
+  id: string,
   brand: string,
   model: string,
   licenceplate: string,
   color: string,
-  image: Array<string>
+  image: string
 }
 
 export interface CarState {
@@ -26,7 +27,7 @@ interface CreateError {
 }
 interface RetrieveAction {
   type: ActionCarType.RETRIEVE,
-  payload:Car
+  payload:Array<Car>
 }
 interface RetrieveError {
   type: ActionCarType.RETRIEVE_ERROR,
