@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 import {Car, Customer as CustomerInterface, CustomRequest} from '../types/customer'
 
 const getCars = async (req: CustomRequest<Car>, res: Response) => {
-  const { id } = req.body;
+  const { id } = req.params;
   const customer = await Customer.findOne({ _id: id, status: 1 }).exec();
   if (!customer)
     return res.status(404).json({
@@ -12,10 +12,7 @@ const getCars = async (req: CustomRequest<Car>, res: Response) => {
     });
   return res.status(200).json({
     ok: true,
-    cars: {
-      id,
-      ...customer.cars
-    },
+    cars: customer.cars
   });
 };
 

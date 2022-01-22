@@ -13,9 +13,8 @@ const router = Router();
 
 // router.use(validateJWT);
 
-router.post(
-  "/",
-  [check("id", "El id es requerido").not().isEmpty(), fieldValidation],
+router.get(
+  "/:id",
   getCars
 );
 
