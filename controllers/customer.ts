@@ -1,6 +1,6 @@
+const Customer = require("../models/customer");
 import {Request, Response} from 'express'
 import { Customer } from '../types/customer';
-const Customer = require("../models/customer");
 
 const getCustomers = async (req: Request, res: Response) => {
   try {

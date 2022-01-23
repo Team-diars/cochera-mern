@@ -19,11 +19,15 @@ const CarSchema: Schema = new Schema({
     image: [
       String
     ],
-    user: {
+    customer: {
         type: Schema.Types.ObjectId,
         ref: "customer",
         required: true,
-    }
+    },
+    status: {
+        type: Number,
+        default: 1,
+    },
 });
 
 

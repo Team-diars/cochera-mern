@@ -12,17 +12,6 @@ const CustomerSchema: Schema = new Schema({
     type: String,
     required:false,
   },
-  cars: [
-    {
-      brand: String,
-      model: String,
-      licenceplate: String,
-      color: String,
-      image: [
-        String
-      ]
-    }
-  ],
   date: {
     type: Date,
     default: Date.now

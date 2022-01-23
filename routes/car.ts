@@ -15,7 +15,7 @@ const router = Router();
 // router.use(validateJWT);
 
 router.get("/:id",getCars);
-router.get("/:customerid/:id",getSingleCar)
+router.get("/show/:id",getSingleCar)
 router.post(
   "/create",
   [
@@ -31,7 +31,7 @@ router.post(
 router.put(
   "/edit/:customerid",
   [
-    check("_id", "El id es requerido").not().isEmpty(),
+    check("id", "El id es requerido").not().isEmpty(),
     check("brand", "La marca es requerida").not().isEmpty(),
     check("model", "El modelo es requerido").not().isEmpty(),
     check("licenceplate", "La placa es requerida").not().isEmpty(),

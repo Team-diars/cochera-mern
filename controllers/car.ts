@@ -1,26 +1,27 @@
-import { Request, Response } from 'express';
-import {Car, Customer, Customer as CustomerInterface, CustomRequest} from '../types/customer'
+const Car = require("../models/car");
 const Customer = require("../models/customer");
+import { Request, Response } from "express";
 
-const getCars = async (req: CustomRequest<Car>, res: Response) => {
+const getCars = async (req, res) => {
   const { id } = req.params;
-  const customer = await Customer.findOne({ _id: id, status: 1 }).exec();
-  if (!customer){
+  const customer = await Customer.findOne({ _id: id, status: 1 });
+  if (!customer) {
     return res.status(404).json({
       ok: false,
       msg: "El cliente no existe",
     });
   }
+  const cars = await Car.find({ customer: customer.id, status: 1 });
   return res.status(200).json({
     ok: true,
-    cars: customer.cars
+    cars: cars,
   });
 };
 
-const getSingleCar = async(req: CustomRequest<Car>, res: Response) => {
+const getSingleCar = async (req, res) => {
   const { id } = req.params;
-  const customer = await Customer.findOne({ "cars._id": id }).exec() as Customer;
-  if (!customer){
+  const car = await Car.findOne({ _id: id, status: 1 });
+  if (!car) {
     return res.status(404).json({
       ok: false,
       msg: "El auto no existe",
@@ -28,32 +29,34 @@ const getSingleCar = async(req: CustomRequest<Car>, res: Response) => {
   }
   return res.status(200).json({
     ok: true,
-    car: customer.cars.find((car: Car) => car.id === id)
+    car: car,
   });
-}
+};
 
-const registerCar = async (req: CustomRequest<Car>, res: Response) => {
+const registerCar = async (req, res) => {
   try {
     const { id, licenceplate } = req.body;
-    const customer = await Customer.findOne({ _id: id, status: 1 }).exec();
+    const customer = await Customer.findOne({ _id: id, status: 1 });
     if (!customer)
       return res.status(404).json({
         ok: false,
         msg: "El cliente no existe",
       });
-    const isPlateRegistered = await Customer.findOne({
-      "cars.licenceplate": licenceplate,
-    }).exec();
+    const isPlateRegistered = await Car.findOne({
+      licenceplate: licenceplate,
+      status: 1,
+    });
     if (isPlateRegistered)
       return res.status(400).json({
         ok: false,
         msg: "El carro ya se encuentra registrado",
       });
-    customer.cars.push(req.body);
-    const customerUpdated = await customer.save();
-    const newCar = customerUpdated.cars.find((car: Car) => {
-      return car.licenceplate == licenceplate;
-    });
+    const data = {
+      ...req.body,
+      customer: customer,
+    };
+    const newCar = new Car(data);
+    await newCar.save();
     return res.status(200).json({
       ok: true,
       message: "Carro registrado exitosamente",
@@ -64,6 +67,7 @@ const registerCar = async (req: CustomRequest<Car>, res: Response) => {
         licenceplate: newCar.licenceplate,
         color: newCar.color,
         image: newCar.image,
+        customer: newCar.customer,
       },
     });
   } catch (error) {
@@ -74,52 +78,42 @@ const registerCar = async (req: CustomRequest<Car>, res: Response) => {
   }
 };
 
-const updateCar = async (req: CustomRequest<Car>, res: Response) => {
+const updateCar = async (req, res) => {
   try {
-    const { id, licenceplate,color, brand, model } = req.body;
-    const {customerid} = req.params;
-    await Customer.findOne({ "_id": customerid }, (err: Error, values: Customer) => {
-      const cars = values.cars;
-      console.log("cars: ",cars)
-      // await Customer.update({'cars._id': id}, {'$set':{
-      //   'cars.$.brand':brand,
-      //   'cars.$.model':model,
-      //   'cars.$.color':color,
-      //   'cars.$.licenceplate':licenceplate,
-      // }}, function(err: Error){
-      //   return res.status(500).json({
-      //           ok: false,
-      //           msg: err,
-      //         });
-      // })
-    }).exec();
-    // if (!customer)
-    //   return res.status(404).json({
-    //     ok: false,
-    //     msg: "El carro no existe",
-    //   });
-    // const isPlateRegistered = await Customer.findOne({"cars.licenceplate": licenceplate}).exec();
-    // if (isPlateRegistered) {
-    //   const car = isPlateRegistered.cars.find((car) => {
-    //     return car.licenceplate == licenceplate;
-    //   });
-    //   if (car._id != id)
-    //     return res.status(404).json({
-    //       ok: false,
-    //       msg: "La placa ya está registrada",
-    //     });
-    // }
-    // const car = await customer.cars.id(id);
-    // car.brand = req.body.brand || null;
-    // car.model = req.body.model || null;
-    // car.licenceplate = req.body.licenceplate || null;
-    // car.color = req.body.color || null;
-    // await car.save();
-    // return res.status(200).json({
-    //   ok: true,
-    //   msg: "Carro actualizado exitosamente",
-    //   car,
-    // });
+    const { id, licenceplate, color, brand, model } = req.body;
+    const { customerid } = req.params;
+    const customer = await Customer.findOne({ _id: customerid, status: 1 });
+    if (!customer)
+      return res.status(404).json({
+        ok: false,
+        msg: "El cliente no existe",
+      });
+    const car = await Car.findOne({ _id: id, status: 1 });
+    if (!car)
+      return res.status(404).json({
+        ok: false,
+        msg: "El carro no existe",
+      });
+    const isPlateRegistered = await Car.findOne({
+      licenceplate: licenceplate,
+      status: 1,
+      _id: { $ne: car._id },
+    });
+    if (isPlateRegistered)
+      return res.status(404).json({
+        ok: false,
+        msg: "La placa ya está registrada",
+      });
+    car.brand = brand;
+    car.model = model;
+    car.licenceplate = licenceplate;
+    car.color = color;
+    await car.save();
+    return res.status(200).json({
+      ok: true,
+      msg: "Carro actualizado exitosamente",
+      car: car,
+    });
   } catch (error) {
     return res.status(500).json({
       ok: false,
@@ -127,19 +121,18 @@ const updateCar = async (req: CustomRequest<Car>, res: Response) => {
     });
   }
 };
-const deleteCar = async(req: CustomRequest<Car>, res: Response) => {
+const deleteCar = async (req, res) => {
   try {
     const { id } = req.params;
-    const car = await Customer.findOne({ "cars._id": id }).exec();
-    if (!car){
+    const car = await Car.findOne({ _id: id, status: 1 });
+    if (!car) {
       return res.status(404).json({
         ok: false,
         msg: "El auto no existe",
       });
     }
-    await Customer.deleteOne({
-      "cars._id": id,
-    }).exec();
+    car.status = 0;
+    await car.save();
     return res.status(200).json({
       ok: true,
       message: "Auto eliminado exitosamente",
@@ -150,11 +143,11 @@ const deleteCar = async(req: CustomRequest<Car>, res: Response) => {
       msg: "Ocurrio un error",
     });
   }
-}
+};
 module.exports = {
   getCars,
   registerCar,
   updateCar,
   deleteCar,
-  getSingleCar
+  getSingleCar,
 };
