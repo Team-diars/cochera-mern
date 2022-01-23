@@ -62,7 +62,7 @@ export const CustomerTable: React.FC = () => {
     }
   },[idSelected])
   
-  console.log("idSelected: ",idSelected);
+  //console.log("idSelected: ",idSelected);
   return ( 
     <MaterialTable 
         options={optionsTable}

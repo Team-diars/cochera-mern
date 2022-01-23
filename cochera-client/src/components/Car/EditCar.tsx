@@ -1,33 +1,33 @@
 import { Button } from '@chakra-ui/button'
-import { FormControl, FormErrorMessage, FormLabel } from '@chakra-ui/form-control'
-import { Input, InputGroup, InputLeftElement } from '@chakra-ui/input'
-import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from '@chakra-ui/modal'
-import React, { LegacyRef, useRef, useState } from 'react'
-import { Car, CarState } from '../../state/actions/car'
-import { ChromePicker, SketchPicker } from 'react-color';
-import reactCSS from 'reactcss'
-import { Box, Text } from '@chakra-ui/layout'
-import axios, { AxiosError } from 'axios'
-import { FiImage } from 'react-icons/fi'
+import { FormControl, FormLabel } from '@chakra-ui/form-control'
 import { Image } from '@chakra-ui/image'
+import { Input, InputGroup, InputLeftElement } from '@chakra-ui/input'
+import { Box, Text } from '@chakra-ui/layout'
+import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from '@chakra-ui/modal'
 import { Spinner } from '@chakra-ui/spinner'
-import { useParams } from 'react-router'
-import { RootState } from '../../state'
+import axios, { AxiosError } from 'axios'
+import React, { LegacyRef, useEffect, useRef, useState } from 'react'
+import { SketchPicker } from 'react-color'
+import { FiImage } from 'react-icons/fi'
 import { useDispatch, useSelector } from 'react-redux'
-import { addCar } from '../../state/action-creators/car'
-var { EditableInput } = require('react-color/lib/components/common');
-
+import { useParams } from 'react-router'
+import reactCSS from 'reactcss'
+import { useSelectedContext } from '../../context/PopupContext'
+import { RootState } from '../../state'
+import { updateCar } from '../../state/action-creators/car'
+import { Car, CarState } from '../../state/actions/car'
 interface CarProps {
   initialRef: LegacyRef<HTMLInputElement>,
   finalRef: React.RefObject<HTMLHeadingElement>,
   isOpen: boolean,
   onClose: () => void,
 }
-
-export const AddCar: React.FC<CarProps> = ({initialRef, finalRef, isOpen, onClose}) => {
-  const {customerid} = useParams<string>();
+export const EditCar: React.FC<CarProps> = ({initialRef, finalRef, isOpen, onClose}) => {
   const dispatch = useDispatch();
+  const {customerid} = useParams()
+  const state: CarState = useSelector((state: RootState) => state.cars);
   const [formData, setFormData] = useState<Car>({
+    _id: "",
     image:"",
     brand: "",
     model:"",
@@ -41,15 +41,10 @@ export const AddCar: React.FC<CarProps> = ({initialRef, finalRef, isOpen, onClos
   const [picker, setPicker] = useState({
     displayColorPicker: false,
   })
-  const saveCar = (e: any) => {
+  const {contextActions: {setIsOpenEditCar, setIdCarSelected}, contextState: {isOpenEditCar,idCarSelected}} = useSelectedContext();
+  const editCar = (e: any) => {
     e.preventDefault();
-    const {_id, ...rest} = formData;
-    if(customerid) {
-      dispatch(addCar({
-        ...rest
-      }))
-      onClose();
-    }
+    (customerid) && dispatch(updateCar(customerid, formData));
   }
   const handleOpenPicker = () => {
     const {displayColorPicker, ...rest} = picker
@@ -73,7 +68,6 @@ export const AddCar: React.FC<CarProps> = ({initialRef, finalRef, isOpen, onClos
     });
   }
   const handleChangeComplete = (color: any) => {
-    console.log("color: ",color.hex);
     const {color:colorFormData, ...rest} = formData;
     setFormData({
       color:color.hex,
@@ -111,6 +105,11 @@ export const AddCar: React.FC<CarProps> = ({initialRef, finalRef, isOpen, onClos
       } as React.CSSProperties,
     },
   });
+  const onClosePopup = () => {
+    setIsOpenEditCar(false);
+    setIdCarSelected(null);    
+    onClose();
+  }
   const uploadFileHandler = async (e: any) => {
     // console.log("Imagen:", e.currentTarget.files[0]);
     e.preventDefault();
@@ -142,11 +141,23 @@ export const AddCar: React.FC<CarProps> = ({initialRef, finalRef, isOpen, onClos
       }
     }
   };
+  useEffect(() => {
+    if(!state.loading){
+      setFormData({
+        _id: state.car?._id || "",
+        brand: state.car?.brand || "",
+        image: state.car?.image || "",
+        color: state.car?.color || "#000",
+        licenceplate: state.car?.licenceplate || "",
+        model: state.car?.model || ""
+      })
+    }
+  },[state.car])
   return (
-    <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose} motionPreset='slideInBottom' size={'md'}>
+    <Modal finalFocusRef={finalRef} isOpen={true} onClose={onClosePopup} motionPreset='slideInBottom' size={'md'}>
       <ModalOverlay />
       <ModalContent maxW="56rem">
-        <ModalHeader size='3xl'>Agregar Carro</ModalHeader>
+        <ModalHeader size='3xl'>Editar Carro</ModalHeader>
         <ModalCloseButton />
         <ModalBody display="flex" justifyContent="space-between">
           <Box w="50%" mr={3}>
@@ -187,13 +198,9 @@ export const AddCar: React.FC<CarProps> = ({initialRef, finalRef, isOpen, onClos
                   accept="image/*"
                   // name="image"
                   ref={imageRef}
-                  // {...register("image")}
-                  // {...register("image", {
-                    //   onChange: (e) => uploadFileHandler,
-                    // })}
-                    onChange={uploadFileHandler}
-                    style={{ display: "none" }}
-                    multiple
+                  onChange={uploadFileHandler}
+                  style={{ display: "none" }}
+                  multiple
                 ></Input>
                 <Input
                   onClick={() => imageRef.current.click()}
@@ -234,10 +241,10 @@ export const AddCar: React.FC<CarProps> = ({initialRef, finalRef, isOpen, onClos
           </Box>
         </ModalBody>  
         <ModalFooter>
-          <Button mr={3} onClick={onClose}>
+          <Button mr={3} onClick={onClosePopup}>
             Cerrar
           </Button>
-          <Button colorScheme='blue' onClick={(e) => saveCar(e)}>Guardar</Button>
+          <Button colorScheme='blue' onClick={(e) => editCar(e)}>Editar</Button>
         </ModalFooter>
       </ModalContent>
     </Modal>

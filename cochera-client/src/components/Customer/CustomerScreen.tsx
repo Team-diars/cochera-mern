@@ -19,7 +19,6 @@ export const CustomerScreen: React.FC = () => {
   const finalRefEdit = useRef<HTMLHeadingElement>(null)
 
   const {contextActions: {setIsOpen}, contextState: {isOpen: isEditPopupOpen}} = useSelectedContext();
-  console.log("isEditPopupOpen: ",isEditPopupOpen);
   return (
     <Container maxW='container.xl' padding="10">
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={5}>

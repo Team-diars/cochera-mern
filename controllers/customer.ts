@@ -110,11 +110,12 @@ const deleteCustomer = async (req: Request, res: Response) => {
   try {
     const { id } = req.body;
     const customer = await Customer.findOne({ _id: id, status: 1 }).exec();
-    if (!customer)
+    if (!customer){
       return res.status(404).json({
         ok: false,
         msg: "El cliente no existe",
       });
+    }
     await Customer.findByIdAndUpdate(
       id,
       { status: 0 },

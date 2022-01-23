@@ -1,6 +1,7 @@
 import mongoose from 'mongoose'
 import { Request, Response } from 'express';
 export interface Car extends mongoose.Document{
+  _id: string,
   brand: string,
   model: string,
   licenceplate: string,

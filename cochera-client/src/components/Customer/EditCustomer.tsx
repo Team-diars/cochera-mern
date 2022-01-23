@@ -39,17 +39,8 @@ interface IProps {
   isOpen: boolean,
   onClose: () => void,
 }
-interface UploadState {
-  previewVisible: boolean,
-  previewImage: string,
-  previewTitle: string,
-  fileList: Array<{uid?: string, percent?:number, name?: string, status?: string, url?: string}>
-}
 export const EditCustomer: React.FC<IProps> = ({initialRef, finalRef, isOpen, onClose}) => {
   const state: CustomerState = useSelector((state: RootState) => state.customers);
-  const [uploadedFiles, setUploadedFiles] = useState<any>([]);
-  const [remainingFiles, setRemainingFiles] = useState<any>([]);
-  const [uploa5ding, setUploading] = useState(false);
   const [formData, setFormData] = useState<Payload>({
     id: "",
     fullname: "",
@@ -78,16 +69,7 @@ export const EditCustomer: React.FC<IProps> = ({initialRef, finalRef, isOpen, on
     setIdSelected(null);    
     onClose();
   }
-  
-  const handlePreview = async(file: {uid?: string, percent?:number, name?: string, status?: string, url?: string, preview?: Promise<unknown | undefined>, originFileObj?: Blob}) => {
-    if (!file.url && !file.preview) {
-      if (await getBase64(file.originFileObj) != undefined){
-        // file.preview = await getBase64(file.originFileObj);
-      }
-    }
-  }
   useEffect(() => {
-    console.log("state.customer: ",state.customer);
     if(!state.loading){
       setFormData({
         id: state.customer?.id || "",
@@ -101,47 +83,41 @@ export const EditCustomer: React.FC<IProps> = ({initialRef, finalRef, isOpen, on
   },[state.customer])
   
   return (
-    <>
-      <Modal finalFocusRef={finalRef} isOpen={true} onClose={onClosePopup}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Editar Cliente</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            {
-              (state.loading) ? <CircularProgress isIndeterminate color='green.300' /> : (
-                <>
-                  <FormControl>
-                    <FormLabel>Nombre Completo</FormLabel>
-                    <Input ref={initialRef} placeholder='Nombre Completo' name="fullname" onChange={(e) => onChange(e)} value={fullname}/>
-                  </FormControl>
+    <Modal finalFocusRef={finalRef} isOpen={true} onClose={onClosePopup}>
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader>Editar Cliente</ModalHeader>
+        <ModalCloseButton />
+        <ModalBody>
+          {
+            (state.loading) ? <CircularProgress isIndeterminate color='green.300' /> : (
+              <>
+                <FormControl>
+                  <FormLabel>Nombre Completo</FormLabel>
+                  <Input ref={initialRef} placeholder='Nombre Completo' name="fullname" onChange={(e) => onChange(e)} value={fullname}/>
+                </FormControl>
 
-                  <FormControl mt={4}>
-                    <FormLabel>Telefono</FormLabel>
-                    <Input placeholder='Telefono' name="cellphone" onChange={(e) => onChange(e)} value={cellphone}/>
-                  </FormControl>
+                <FormControl mt={4}>
+                  <FormLabel>Telefono</FormLabel>
+                  <Input placeholder='Telefono' name="cellphone" onChange={(e) => onChange(e)} value={cellphone}/>
+                </FormControl>
 
-                  <FormControl mt={4}>
-                    <FormLabel>Direccion</FormLabel>
-                    <Input placeholder='Direccion' name="address" onChange={(e) => onChange(e)} value={address}/>
-                  </FormControl>
+                <FormControl mt={4}>
+                  <FormLabel>Direccion</FormLabel>
+                  <Input placeholder='Direccion' name="address" onChange={(e) => onChange(e)} value={address}/>
+                </FormControl>
+              </>
+            )
+          }
 
-                  <FormControl mt={4}>
-                    <FormLabel>Autos</FormLabel>
-                  </FormControl>
-                </>
-              )
-            }
-
-          </ModalBody>
-          <ModalFooter>
-            <Button mr={3} onClick={onClosePopup}>
-              Cerrar
-            </Button>
-            <Button colorScheme='blue' onClick={(e) => editCustomer(formData)}>Guardar</Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-    </>
+        </ModalBody>
+        <ModalFooter>
+          <Button mr={3} onClick={onClosePopup}>
+            Cerrar
+          </Button>
+          <Button colorScheme='blue' onClick={(e) => editCustomer(formData)}>Guardar</Button>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
   )
 }

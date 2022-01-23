@@ -24,6 +24,34 @@ const reducer = (state: CarState = initialState, action: CarAction) => {
         loading:false,
         error:null,
       }
+    case ActionCarType.RETRIEVE_SINGLE_CAR:
+      return {
+        ...state,
+        car: action.payload,
+        loading:false,
+        error:null
+      }
+    case ActionCarType.EDIT:
+      return {
+        ...state,
+        loading: false,
+        customers: state.cars.map(car => car.licenceplate === action.payload.licenceplate ? car = action.payload : car)
+      }
+    case ActionCarType.DELETE:
+      return {
+        ...state,
+        loading: false,
+        customers: state.cars.filter(car => car.licenceplate !== action.payload)
+      }
+    case ActionCarType.CLEAR_CARS:
+      return {
+        ...state,
+        cars: [],
+        loading: false
+      }
+    case ActionCarType.RETRIEVE_SINGLE_CAR_ERROR:
+    case ActionCarType.EDIT_ERROR:
+    case ActionCarType.DELETE_ERROR:
     case ActionCarType.RETRIEVE_ERROR:  
     case ActionCarType.ADD_ERROR:
       return {

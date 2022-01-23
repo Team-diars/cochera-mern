@@ -139,7 +139,7 @@ export const deleteCustomer = (id: string) => async(dispatch: Dispatch<CustomerA
     let error = err as AxiosError;
     if(error.response) {
       dispatch({
-        type: ActionType.RETRIEVE_ERROR,
+        type: ActionType.DELETE_ERROR,
         payload: {
           msg: error.response.data,
           status: error.response.status

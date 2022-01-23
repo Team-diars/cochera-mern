@@ -2,7 +2,7 @@ import { ActionCarType } from "../action-types/car";
 import {Error} from './index'
 
 export interface Car {
-  id: string,
+  _id?: string,
   brand: string,
   model: string,
   licenceplate: string,

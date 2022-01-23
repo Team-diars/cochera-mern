@@ -16,13 +16,11 @@ const config: AxiosRequestConfig = {
 }
 
 export const getCars = (id: string) => async(dispatch: Dispatch<CarAction | Action>) => {
+  dispatch({
+    type: ActionCarType.CLEAR_CARS,
+  })
   try{
-    const res = await axios.get<CarResponse>('/api/car/', {
-      ...config.headers,
-      data: {
-        id
-      }
-    })
+    const res = await axios.get<CarResponse>(`http://localhost:8000/api/car/${id}`,config)
     dispatch({
       type: ActionCarType.RETRIEVE,
       payload: res.data.cars
@@ -40,16 +38,35 @@ export const getCars = (id: string) => async(dispatch: Dispatch<CarAction | Acti
     }
   }
 }
-
+export const getSingleCar = (id: string, customerid: string) => async(dispatch: Dispatch<CarAction | Action>) => {
+  try {
+    const res = await axios.get(`http://localhost:8000/api/car/${customerid}/${id}`,config);
+    console.log("res: ",res)
+    dispatch({
+      type: ActionCarType.RETRIEVE_SINGLE_CAR,
+      payload: res.data.car
+    })
+  } catch (err) {
+    let error = err as AxiosError;
+    if (error.response) {
+      dispatch({
+        type: ActionCarType.RETRIEVE_SINGLE_CAR_ERROR,
+        payload: {
+          msg: error.response.data,
+          status: error.response.status
+        }
+      })
+    }
+  }
+}
 export const addCar = (formData: Car) => async(dispatch: Dispatch<CarAction | Action>) => {
   try {
-    const res = await axios.post('/api/car/create',{
+    const res = await axios.post('http://localhost:8000/api/car/create',{
       ...formData
     },config);
-    console.log("res: ",res);
     dispatch({
       type: ActionCarType.ADD,
-      payload: res.data.customer
+      payload: res.data.car
     })
 
   } catch (err) {
@@ -57,6 +74,47 @@ export const addCar = (formData: Car) => async(dispatch: Dispatch<CarAction | Ac
     if(error.response) {
       dispatch({
         type: ActionCarType.ADD_ERROR,
+        payload: {
+          msg: error.response.data,
+          status: error.response.status
+        }
+      })
+    }
+  }
+}
+export const updateCar = (customerid:string, formData: Car) => async(dispatch: Dispatch<CarAction | Action>) => {
+  try {
+    let {data} = await axios.put(`http://localhost:8000/api/car/edit/${customerid}`,formData ,config);
+    console.log(data)
+    dispatch({
+      type: ActionCarType.EDIT,
+      payload: data.car,
+    })
+  } catch (err) {
+    let error = err as AxiosError;
+    if (error.response){
+      dispatch({
+        type: ActionCarType.EDIT_ERROR,
+        payload: {
+          msg: error.response.data,
+          status: error.response.status
+        }
+      })
+    }
+  }
+}
+export const deleteCar = (id: string) => async(dispatch: Dispatch<CarAction | Action>) => {
+  try {
+    await axios.delete(`/api/car/delete/${id}`,config);
+    dispatch({
+      type:ActionCarType.DELETE,
+      payload: id
+    });
+  } catch (err) {
+    let error = err as AxiosError;
+    if(error.response) {
+      dispatch({
+        type: ActionCarType.DELETE_ERROR,
         payload: {
           msg: error.response.data,
           status: error.response.status

@@ -9,27 +9,36 @@ import { MdArrowBack } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import { RootState } from '../../state';
-import { CustomerState } from '../../state/actions/customer';
+import { CustomerState, Payload } from '../../state/actions/customer';
 import { CarCard } from './CarCard';
 import { AddCar } from './AddCar';
 import { useEffect } from 'react';
-import { CarState } from '../../state/actions/car';
+import { Car, CarState } from '../../state/actions/car';
 import { getCars } from '../../state/action-creators/car';
+import { getSingleCustomer } from '../../state/action-creators';
+import { useSelectedContext } from '../../context/PopupContext';
+import { EditCar } from './EditCar';
 
 export const CardsScreen: React.FC = () => {
-  const {customerid} = useParams<string>();
+  const {customerid} = useParams();
   const navigate = useNavigate();
-  const data_customer: CustomerState = useSelector((state: RootState) => state.customers);
   const data_cars: CarState = useSelector((state: RootState) => state.cars);
+  const data_customer: CustomerState = useSelector((state: RootState) => state.customers);
   const dispatch = useDispatch();
   const initialRef = useRef<HTMLInputElement>(null)
   const finalRef = useRef<HTMLHeadingElement>(null)
-  const { isOpen, onOpen, onClose } = useDisclosure()
-  const customer = data_customer.customers.find(customer => customer.id === customerid);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const {contextActions: {setIsOpenEditCar, setIdCarSelected}, contextState: {isOpenEditCar, idCarSelected}} = useSelectedContext();
   useEffect(() => {
-    const retrieveCustomers = () => customerid && dispatch(getCars(customerid));
-    retrieveCustomers();
+    const retrieveCars = () => customerid && dispatch(getCars(customerid));
+    retrieveCars();
   },[dispatch])
+  useEffect(() => {
+    if(customerid){
+      const retrieveSingleCustomer = (id: string) => dispatch(getSingleCustomer(id));
+      retrieveSingleCustomer(customerid);
+    }
+  },[customerid])
   return (
     <Container maxW='container.xl' padding="10">
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={10}>
@@ -38,7 +47,7 @@ export const CardsScreen: React.FC = () => {
                 fontWeight="bold"
                 lineHeight="short"
                 >
-            Autos de {(customer) && customer.fullname}
+            Autos de {(data_customer.customer) && data_customer.customer.fullname}
           </Text>
         </Box>
         <Box>
@@ -52,17 +61,16 @@ export const CardsScreen: React.FC = () => {
       </Box>
       <Grid templateColumns='repeat(3, 1fr)' gap={6}>
         {
-          data_cars.cars.map((car) => (
-            <CarCard {...car}/>    
+          (data_cars.cars) && data_cars.cars.map((car: Car) => (
+            <CarCard key={car._id} customerid={customerid} {...car}/>    
           ))
         }
-        {/* <CarCard image={"image-1642280809448.png"} color={"#4232"}/>
-        <CarCard image={""} color={"#fff"}/>
-        <CarCard image={""} color={"#000"}/>
-        <CarCard image={""} color={"#442345"}/> */}
       </Grid>
       {
         (isOpen) && <AddCar initialRef={initialRef} finalRef={finalRef} isOpen={isOpen} onClose={onClose}/>
+      }
+      {
+        (isOpenEditCar) && <EditCar initialRef={initialRef} finalRef={finalRef} isOpen={true} onClose={onClose}/>
       }
     </Container>
   )

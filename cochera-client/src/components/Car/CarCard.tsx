@@ -12,17 +12,37 @@ import React, { useEffect, useState } from 'react'
 import { AiFillDelete } from 'react-icons/ai'
 import { FiDelete, FiEdit, FiImage } from 'react-icons/fi'
 import { GiCancel } from 'react-icons/gi'
+import { useDispatch } from 'react-redux'
+import { useParams } from 'react-router'
+import { useSelectedContext } from '../../context/PopupContext'
+import { deleteCar, getSingleCar } from '../../state/action-creators/car'
 import { Car } from '../../state/actions/car'
 
+interface CarProps {
+  customerid: string | undefined
+}
 
-export const CarCard: React.FC<Car> = ({image, color, brand, model, licenceplate}) => {
+export const CarCard: React.FC<Car & CarProps> = ({_id,image, color, brand, model, licenceplate, customerid}) => {
+  const {contextActions: {setIsOpenEditCar, setIdCarSelected}, contextState: {isOpenEditCar, idCarSelected}} = useSelectedContext();
+  const dispatch = useDispatch();
+  const updateCar = (id: string | null = null): void => {
+    setIdCarSelected(id);
+    setIsOpenEditCar(true);
+  }
+  const removeCar = (id: string | null = null): void => {
+    if (!id) return;
+    dispatch(deleteCar(id));
+  }
+  useEffect(() => {
+    if(idCarSelected){
+      const retrieveSingleCar = (id: string) => (customerid) && dispatch(getSingleCar(id,customerid));
+      retrieveSingleCar(idCarSelected);
+    }
+  },[idCarSelected])
+  console.log("idCarSelected: ",idCarSelected);
   return (    
       <FormControl borderWidth="1px" p={5} borderRadius="md" background="tail" boxShadow='md' bg="white">
-        <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-          {/* <FormLabel mb="0" fontWeight="bold">Toyota</FormLabel> */}
-          <Spacer/>
-          <Badge variant='solid' colorScheme='gray'>Auto</Badge>
-        </Box>
+        <Spacer/>
           {
             (image) ? (
               <Box
@@ -32,7 +52,8 @@ export const CarCard: React.FC<Car> = ({image, color, brand, model, licenceplate
                 style={{ background: "#eee" }}
               >
                 <Image
-                  boxSize="100%"
+                  maxW="160px"
+                  margin="0 auto"
                   src={`/images/${image}`}
                   alt="Imagen"
                 />
@@ -65,10 +86,10 @@ export const CarCard: React.FC<Car> = ({image, color, brand, model, licenceplate
         </Box>
         <Divider orientation='horizontal' my={3}/>
         <Box w="100%" display="flex" justifyContent="space-between">
-          <Button colorScheme="gray" leftIcon={<FiEdit />} mr={2} w="48%">
+          <Button colorScheme="gray" leftIcon={<FiEdit />} mr={2} w="48%" onClick={() => updateCar(_id)}>
             Editar
           </Button>
-          <Button colorScheme="red" leftIcon={<AiFillDelete />} w="48%">
+          <Button colorScheme="red" leftIcon={<AiFillDelete />} w="48%" onClick={() => removeCar(_id)}>
             Eliminar
           </Button>
         </Box>
