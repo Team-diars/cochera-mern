@@ -28,7 +28,7 @@ export const EditCar: React.FC<CarProps> = ({initialRef, finalRef, isOpen, onClo
   const state: CarState = useSelector((state: RootState) => state.cars);
   const [formData, setFormData] = useState<Car>({
     _id: "",
-    image:"",
+    image:[],
     brand: "",
     model:"",
     licenceplate:"",
@@ -45,6 +45,7 @@ export const EditCar: React.FC<CarProps> = ({initialRef, finalRef, isOpen, onClo
   const editCar = (e: any) => {
     e.preventDefault();
     (customerid) && dispatch(updateCar(customerid, formData));
+    onClosePopup();
   }
   const handleOpenPicker = () => {
     const {displayColorPicker, ...rest} = picker
@@ -146,7 +147,7 @@ export const EditCar: React.FC<CarProps> = ({initialRef, finalRef, isOpen, onClo
       setFormData({
         _id: state.car?._id || "",
         brand: state.car?.brand || "",
-        image: state.car?.image || "",
+        image: state.car?.image || [],
         color: state.car?.color || "#000",
         licenceplate: state.car?.licenceplate || "",
         model: state.car?.model || ""

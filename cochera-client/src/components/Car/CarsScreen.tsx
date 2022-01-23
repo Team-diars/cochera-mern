@@ -29,16 +29,17 @@ export const CardsScreen: React.FC = () => {
   const finalRef = useRef<HTMLHeadingElement>(null)
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {contextActions: {setIsOpenEditCar, setIdCarSelected}, contextState: {isOpenEditCar, idCarSelected}} = useSelectedContext();
-  useEffect(() => {
-    const retrieveCars = () => customerid && dispatch(getCars(customerid));
-    retrieveCars();
-  },[dispatch])
+  
   useEffect(() => {
     if(customerid){
       const retrieveSingleCustomer = (id: string) => dispatch(getSingleCustomer(id));
       retrieveSingleCustomer(customerid);
     }
   },[customerid])
+  useEffect(() => {
+    const retrieveCars = () => customerid && dispatch(getCars(customerid));
+    retrieveCars();
+  },[dispatch])
   return (
     <Container maxW='container.xl' padding="10">
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={10}>

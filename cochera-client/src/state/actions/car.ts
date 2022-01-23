@@ -7,7 +7,7 @@ export interface Car {
   model: string,
   licenceplate: string,
   color: string,
-  image: string
+  image: Array<string>
 }
 
 export interface CarState {

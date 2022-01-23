@@ -40,7 +40,7 @@ export const getCars = (id: string) => async(dispatch: Dispatch<CarAction | Acti
 }
 export const getSingleCar = (id: string, customerid: string) => async(dispatch: Dispatch<CarAction | Action>) => {
   try {
-    const res = await axios.get(`http://localhost:8000/api/car/${customerid}/${id}`,config);
+    const res = await axios.get(`http://localhost:8000/api/car/show/${id}`,config);
     console.log("res: ",res)
     dispatch({
       type: ActionCarType.RETRIEVE_SINGLE_CAR,
@@ -85,7 +85,7 @@ export const addCar = (formData: Car) => async(dispatch: Dispatch<CarAction | Ac
 export const updateCar = (customerid:string, formData: Car) => async(dispatch: Dispatch<CarAction | Action>) => {
   try {
     let {data} = await axios.put(`http://localhost:8000/api/car/edit/${customerid}`,formData ,config);
-    console.log(data)
+    console.log("EDIT-data: ",data)
     dispatch({
       type: ActionCarType.EDIT,
       payload: data.car,

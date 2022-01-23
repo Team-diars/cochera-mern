@@ -28,7 +28,8 @@ export const AddCar: React.FC<CarProps> = ({initialRef, finalRef, isOpen, onClos
   const {customerid} = useParams<string>();
   const dispatch = useDispatch();
   const [formData, setFormData] = useState<Car>({
-    image:"",
+    _id: "",
+    image:[],
     brand: "",
     model:"",
     licenceplate:"",
@@ -46,6 +47,7 @@ export const AddCar: React.FC<CarProps> = ({initialRef, finalRef, isOpen, onClos
     const {_id, ...rest} = formData;
     if(customerid) {
       dispatch(addCar({
+        _id: customerid,
         ...rest
       }))
       onClose();

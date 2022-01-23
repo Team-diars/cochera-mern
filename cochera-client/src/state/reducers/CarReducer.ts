@@ -35,13 +35,13 @@ const reducer = (state: CarState = initialState, action: CarAction) => {
       return {
         ...state,
         loading: false,
-        customers: state.cars.map(car => car.licenceplate === action.payload.licenceplate ? car = action.payload : car)
+        cars: state.cars.map(car => car._id === action.payload._id ? car = action.payload : car)
       }
     case ActionCarType.DELETE:
       return {
         ...state,
         loading: false,
-        customers: state.cars.filter(car => car.licenceplate !== action.payload)
+        cars: state.cars.filter(car => car._id !== action.payload)
       }
     case ActionCarType.CLEAR_CARS:
       return {

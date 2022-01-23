@@ -19,7 +19,7 @@ router.get("/show/:id",getSingleCar)
 router.post(
   "/create",
   [
-    check("id", "El id es requerido").not().isEmpty(),
+    check("_id", "El id es requerido").not().isEmpty(),
     check("brand", "La marca es requerida").not().isEmpty(),
     check("model", "El modelo es requerido").not().isEmpty(),
     check("licenceplate", "La placa es requerida").not().isEmpty(),
@@ -31,7 +31,7 @@ router.post(
 router.put(
   "/edit/:customerid",
   [
-    check("id", "El id es requerido").not().isEmpty(),
+    check("_id", "El id es requerido").not().isEmpty(),
     check("brand", "La marca es requerida").not().isEmpty(),
     check("model", "El modelo es requerido").not().isEmpty(),
     check("licenceplate", "La placa es requerida").not().isEmpty(),

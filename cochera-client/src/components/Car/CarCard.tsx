@@ -39,12 +39,12 @@ export const CarCard: React.FC<Car & CarProps> = ({_id,image, color, brand, mode
       retrieveSingleCar(idCarSelected);
     }
   },[idCarSelected])
-  console.log("idCarSelected: ",idCarSelected);
+  console.log("image: ",image);
   return (    
       <FormControl borderWidth="1px" p={5} borderRadius="md" background="tail" boxShadow='md' bg="white">
         <Spacer/>
           {
-            (image) ? (
+            (image && image.length > 0) ? (
               <Box
                 mt="1"
                 mb={2}

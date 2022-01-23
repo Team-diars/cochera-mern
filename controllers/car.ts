@@ -1,8 +1,9 @@
+import { Request, Response } from "express";
+import { Car as ICar, Customer, CustomRequest } from "../types/customer";
 const Car = require("../models/car");
 const Customer = require("../models/customer");
-import { Request, Response } from "express";
 
-const getCars = async (req, res) => {
+const getCars = async (req: CustomRequest<ICar>, res: Response) => {
   const { id } = req.params;
   const customer = await Customer.findOne({ _id: id, status: 1 });
   if (!customer) {
@@ -18,9 +19,9 @@ const getCars = async (req, res) => {
   });
 };
 
-const getSingleCar = async (req, res) => {
+const getSingleCar = async (req: CustomRequest<ICar>, res: Response) => {
   const { id } = req.params;
-  const car = await Car.findOne({ _id: id, status: 1 });
+  const car = await Car.findOne({ _id: id, status: 1 }) as ICar;
   if (!car) {
     return res.status(404).json({
       ok: false,
@@ -33,10 +34,10 @@ const getSingleCar = async (req, res) => {
   });
 };
 
-const registerCar = async (req, res) => {
+const registerCar = async (req: CustomRequest<ICar>, res: Response) => {
   try {
-    const { id, licenceplate } = req.body;
-    const customer = await Customer.findOne({ _id: id, status: 1 });
+    const { _id, licenceplate, brand, model, color, image } = req.body;
+    const customer = await Customer.findOne({ _id, status: 1 });
     if (!customer)
       return res.status(404).json({
         ok: false,
@@ -46,13 +47,18 @@ const registerCar = async (req, res) => {
       licenceplate: licenceplate,
       status: 1,
     });
-    if (isPlateRegistered)
+    if (isPlateRegistered){
       return res.status(400).json({
         ok: false,
         msg: "El carro ya se encuentra registrado",
       });
+    }
     const data = {
-      ...req.body,
+      licenceplate,
+      brand,
+      model,
+      color,
+      image,
       customer: customer,
     };
     const newCar = new Car(data);
@@ -78,9 +84,9 @@ const registerCar = async (req, res) => {
   }
 };
 
-const updateCar = async (req, res) => {
+const updateCar = async (req: CustomRequest<ICar>, res: Response) => {
   try {
-    const { id, licenceplate, color, brand, model } = req.body;
+    const { _id, licenceplate, color, brand, model, image } = req.body;
     const { customerid } = req.params;
     const customer = await Customer.findOne({ _id: customerid, status: 1 });
     if (!customer)
@@ -88,7 +94,7 @@ const updateCar = async (req, res) => {
         ok: false,
         msg: "El cliente no existe",
       });
-    const car = await Car.findOne({ _id: id, status: 1 });
+    const car = await Car.findOne({ _id: _id, status: 1 });
     if (!car)
       return res.status(404).json({
         ok: false,
@@ -108,6 +114,7 @@ const updateCar = async (req, res) => {
     car.model = model;
     car.licenceplate = licenceplate;
     car.color = color;
+    car.image = image;
     await car.save();
     return res.status(200).json({
       ok: true,
@@ -121,7 +128,7 @@ const updateCar = async (req, res) => {
     });
   }
 };
-const deleteCar = async (req, res) => {
+const deleteCar = async (req: CustomRequest<ICar>, res: Response) => {
   try {
     const { id } = req.params;
     const car = await Car.findOne({ _id: id, status: 1 });
