@@ -4,17 +4,8 @@ import Icon from '@chakra-ui/icon';
 import { Box, Container, Heading, Text } from '@chakra-ui/layout';
 import React, { useEffect, useRef, useState } from 'react'
 
-import {
-  FiCheck,
-  FiEdit,
-  FiFile,
-  FiMoreVertical,
-  FiPlus,
-  FiTrash2,
-  FiX,
-  FiXCircle,
-} from "react-icons/fi";
-import { useSelectedContext } from '../context/PopupContext';
+import { FiPlus } from "react-icons/fi";
+import { useSelectedContext } from '../../context/PopupContext';
 import { AddCustomer } from './AddCustomer';
 import { EditCustomer } from './EditCustomer';
 import { CustomerTable } from './Table';
@@ -28,19 +19,18 @@ export const CustomerScreen: React.FC = () => {
   const finalRefEdit = useRef<HTMLHeadingElement>(null)
 
   const {contextActions: {setIsOpen}, contextState: {isOpen: isEditPopupOpen}} = useSelectedContext();
-  console.log("isEditPopupOpen: ",isEditPopupOpen);
   return (
     <Container maxW='container.xl' padding="10">
-      <Box display="flex" justifyContent="space-between" alignItems="center">
-        <Box p='2'>
-          <Text fontSize="2xl"
+      <Box display="flex" justifyContent="space-between" alignItems="center" mb={5}>
+        <Box >
+          <Text fontSize="3xl"
                 fontWeight="bold"
-                lineHeight="short">
+                lineHeight="short"
+                >
             Clientes
           </Text>
         </Box>
-        <Button colorScheme="blue" onClick={onOpen}>
-          <Icon as={FiPlus} h={[4, 6]} w={[4, 6]} alignSelf={"center"} />
+        <Button colorScheme="blue" onClick={onOpen} leftIcon={<Icon as={FiPlus} h={[4, 6]} w={[4, 6]} alignSelf={"center"} />}>
           Nuevo Cliente 
         </Button>
       </Box>

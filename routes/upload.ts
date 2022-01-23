@@ -40,9 +40,10 @@ const upload = multer({
 //* @access Private
 router.post('/', upload.single('image'),(req, res) => {
   try{
+    console.log(req);
     res.send(`/${req.file.filename}`)
   }catch(e){
-    
+    console.error(e);
   }
 })
 

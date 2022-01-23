@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from "react";
 
-import { forwardRef, Tooltip, TooltipProps } from "@chakra-ui/react";
+import { forwardRef, Text, Tooltip, TooltipProps } from "@chakra-ui/react";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import customParseFormat from "dayjs/plugin/customParseFormat";
@@ -35,8 +35,8 @@ export const DateFormat = forwardRef(function DateFormat({ date = new Date(), fo
   }, [date]);
 
   return (
-    <Tooltip ref={ref} label={dayjsDate.format(format ?? "DD/MM/YYYY")} placement="top-start">
-      {dayjsDate.fromNow() || dayjsDate.format(format ?? "DD/MM/YYYY")}
+    <Tooltip ref={ref} label={dayjsDate.format(format ?? "DD/MM/YYYY")} placement="top-start" bg='gray.300' color='black' hasArrow>
+      <Text>{dayjsDate.fromNow() || dayjsDate.format(format ?? "DD/MM/YYYY")}</Text>
     </Tooltip>
   );
 });

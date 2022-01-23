@@ -1,13 +1,7 @@
 import { ActionType } from "../action-types";
+import { Car } from "./car";
 import {Error} from './index'
 
-interface Car {
-  brand: string,
-  model: string,
-  licenceplate: string,
-  color: string,
-  image: Array<string>
-}
 export interface Payload {
   id: string,
   fullname: string,
