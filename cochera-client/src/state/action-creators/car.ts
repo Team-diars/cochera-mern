@@ -6,7 +6,7 @@ import { Car, CarAction } from "../actions/car";
 
 interface CarResponse {
   ok: boolean,
-  cars: Array<Car>
+  cars: Array<Car>,
 }
 
 const config: AxiosRequestConfig = {
