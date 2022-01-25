@@ -2,7 +2,7 @@ import CustomerScreen from './components/Customer/CustomerScreen';
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom'
 import { ChakraProvider } from '@chakra-ui/react';
 import theme from './config/theme';
-import { SidebarSreen } from './components/Sidebar/SidebarSreen';
+import { SidebarScreen } from './components/Sidebar/SidebarSreen';
 import { Provider } from 'react-redux';
 import {store} from './state/store';
 import {AppContextProvider} from './context/PopupContext';
@@ -15,12 +15,13 @@ function App() {
       <AppContextProvider>
         <ChakraProvider theme={theme}>
           <Router>
-            <SidebarSreen/>
-            <Routes>
-              <Route path='/' element={<LoginScreen/>}/>
-              <Route path='/customer' element={<CustomerScreen/>}/>
-              <Route path='/cars/:customerid' element={<CardsScreen/>}/>
-            </Routes>
+            <SidebarScreen>
+              <Routes>
+                <Route path='/' element={<LoginScreen/>}/>
+                <Route path='/customer' element={<CustomerScreen/>}/>
+                <Route path='/cars/:customerid' element={<CardsScreen/>}/>
+              </Routes>
+            </SidebarScreen>
           </Router>
         </ChakraProvider>
       </AppContextProvider>
