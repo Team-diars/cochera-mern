@@ -1,4 +1,5 @@
 import React, { ReactNode } from 'react';
+import {Link as RouterLink} from 'react-router-dom'
 import {
   IconButton,
   Avatar,
@@ -9,7 +10,6 @@ import {
   VStack,
   Icon,
   useColorModeValue,
-  Link,
   Drawer,
   DrawerContent,
   Text,
@@ -22,6 +22,8 @@ import {
   MenuItem,
   MenuList,
   Image,
+  Center,
+  Link,
 } from '@chakra-ui/react';
 import {
   FiHome,
@@ -32,20 +34,24 @@ import {
   FiMenu,
   FiBell,
   FiChevronDown,
+  FiUser,
 } from 'react-icons/fi';
 import { IconType } from 'react-icons';
 import { ReactText } from 'react';
+import { AiFillDashboard } from 'react-icons/ai';
+import { GiHomeGarage } from 'react-icons/gi';
 
 interface LinkItemProps {
   name: string;
   icon: IconType;
+  path: string;
 }
 const LinkItems: Array<LinkItemProps> = [
-  { name: 'Home', icon: FiHome },
-  { name: 'Trending', icon: FiTrendingUp },
-  { name: 'Explore', icon: FiCompass },
-  { name: 'Favourites', icon: FiStar },
-  { name: 'Settings', icon: FiSettings },
+  { name: 'Dashboard', icon: AiFillDashboard, path:'/dashboard' },
+  { name: 'Clientes', icon: FiUser, path:'/customer' },
+  { name: 'Cochera', icon: GiHomeGarage, path:'/garage' },
+  { name: 'Favourites', icon: FiStar, path:'/favourites' },
+  { name: 'Configuracion', icon: FiSettings, path:'/settings' },
 ];
 
 export const SidebarScreen = ({ children }: {
@@ -95,13 +101,15 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       h="full"
       {...rest}>
       <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
-        <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
-          <Image src={'/cochera-icon.png'}/>
+        <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold" margin="0 auto">
+          <Avatar bg="transparent" display="flex" justifyContent="center" alignItems="center">
+            <Image src={'/cochera-logo.png'} alt="Garage Logo"/>
+          </Avatar>
         </Text>
         <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
       </Flex>
       {LinkItems.map((link) => (
-        <NavItem key={link.name} icon={link.icon}>
+        <NavItem key={link.name} icon={link.icon} path={link.path}>
           {link.name}
         </NavItem>
       ))}
@@ -112,10 +120,11 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
 interface NavItemProps extends FlexProps {
   icon: IconType;
   children: ReactText;
+  path: string;
 }
-const NavItem = ({ icon, children, ...rest }: NavItemProps) => {
+const NavItem = ({ path, icon, children, ...rest }: NavItemProps) => {
   return (
-    <Link href="#" style={{ textDecoration: 'none' }} _focus={{ boxShadow: 'none' }}>
+    <RouterLink to={path} style={{ color: 'inherit', textDecoration: 'inherit'}}>
       <Flex
         align="center"
         p="4"
@@ -140,7 +149,7 @@ const NavItem = ({ icon, children, ...rest }: NavItemProps) => {
         )}
         {children}
       </Flex>
-    </Link>
+    </RouterLink>
   );
 };
 
@@ -169,10 +178,12 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
 
       <Text
         display={{ base: 'flex', md: 'none' }}
-        fontSize="2xl"
+        fontSize="2sm"
         fontFamily="monospace"
-        fontWeight="bold">
-        Logo
+        fontWeight="bold" margin="0 auto">
+          <Avatar bg="transparent" display="flex" justifyContent="center" alignItems="center">
+            <Image src={'/cochera-logo.png'} alt="Garage Logo"/>
+          </Avatar>
       </Text>
 
       <HStack spacing={{ base: '0', md: '6' }}>
@@ -213,11 +224,10 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
             <MenuList
               bg={useColorModeValue('white', 'gray.900')}
               borderColor={useColorModeValue('gray.200', 'gray.700')}>
-              <MenuItem>Profile</MenuItem>
-              <MenuItem>Settings</MenuItem>
-              <MenuItem>Billing</MenuItem>
+              <MenuItem>Perfil</MenuItem>
+              <MenuItem>Configuracion</MenuItem>
               <MenuDivider />
-              <MenuItem>Sign out</MenuItem>
+              <MenuItem>Cerrar Sesion</MenuItem>
             </MenuList>
           </Menu>
         </Flex>

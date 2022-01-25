@@ -1,9 +1,17 @@
 import {
+  Box,
   Button,
+  Checkbox,
   Container,
+  Flex,
   FormControl,
   FormLabel,
+  Heading,
   Input,
+  Link,
+  Stack,
+  Text,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -42,33 +50,51 @@ export const LoginScreen: React.FC = () => {
   };
 
   return (
-    <Container maxW="container.xl" padding="10">
-      <form onSubmit={handleSubmit}>
-        <FormControl>
-          <FormLabel htmlFor="name">Email</FormLabel>
-          <Input
-            id="email"
-            name="email"
-            placeholder="Email"
-            type="email"
-            value={formData.email}
-            onChange={inputChange}
-          />
-          <FormLabel htmlFor="name">Password</FormLabel>
-          <Input
-            id="password"
-            name="password"
-            placeholder="*****"
-            type="password"
-            value={formData.password}
-            onChange={inputChange}
-          />
-        </FormControl>
-        <Button mt={4} colorScheme="teal" type="submit">
-          Submit
-        </Button>
-      </form>
-    </Container>
+    <Flex
+      minH={'100vh'}
+      align={'flex-start'}
+      justify={'center'}
+      bg={useColorModeValue('gray.50', 'gray.800')}>
+      <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
+        <Stack align={'center'}>
+          <Heading fontSize={'4xl'}>Acceder a Cochera App</Heading>
+        </Stack>
+        <Box
+          rounded={'lg'}
+          bg={useColorModeValue('white', 'gray.700')}
+          boxShadow={'lg'}
+          
+          p={8}>
+          <Stack spacing={4}>
+            <FormControl id="email">
+              <FormLabel>Correo</FormLabel>
+              <Input type="email" onChange={inputChange} name="email" value={formData.email}/>
+            </FormControl>
+            <FormControl id="password">
+              <FormLabel>Contrasena</FormLabel>
+              <Input type="password" onChange={inputChange} name="password" value={formData.password}/>
+            </FormControl>
+            <Stack spacing={10}>
+              <Stack
+                direction={{ base: 'column', sm: 'row' }}
+                align={'start'}
+                justify={'space-between'}>
+                <Checkbox>Remember me</Checkbox>
+                <Link color={'blue.400'}>Forgot password?</Link>
+              </Stack>
+              <Button
+                bg={'blue.400'}
+                color={'white'}
+                _hover={{
+                  bg: 'blue.500',
+                }} onClick={handleSubmit}>
+                Ingresar
+              </Button>
+            </Stack>
+          </Stack>
+        </Box>
+      </Stack>
+    </Flex>
   );
 };
 

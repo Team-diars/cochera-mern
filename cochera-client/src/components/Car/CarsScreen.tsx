@@ -19,7 +19,7 @@ import { getSingleCustomer } from '../../state/action-creators';
 import { useSelectedContext } from '../../context/PopupContext';
 import { EditCar } from './EditCar';
 
-export const CardsScreen: React.FC = () => {
+export const CarsScreen: React.FC = () => {
   const {customerid} = useParams();
   const navigate = useNavigate();
   const data_cars: CarState = useSelector((state: RootState) => state.cars);
