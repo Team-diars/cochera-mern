@@ -125,14 +125,18 @@ export const EditCar: React.FC<CarProps> = ({initialRef, finalRef, isOpen, onClo
         },
       };
       try {
-        const { data } = await axios.post("http://localhost:8000/api/upload",form,config);
-        console.log(data);
-        const {image:CarImage, ...rest} = formData;
-        setFormData({
-          image: data,
-          ...rest
+        axios.post("http://localhost:8000/api/upload",form,config)
+        .then((res) => {
+          e.preventDefault();
+          console.log(res.data);
+          const {image:CarImage, ...rest} = formData;
+          setFormData({
+            image: res.data,
+            ...rest
+          })
+          setUploading(false);
         })
-        setUploading(false);
+        
       } catch (error) {
         let err = error as AxiosError;
         if (err.response){
