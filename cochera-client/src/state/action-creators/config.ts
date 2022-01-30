@@ -10,6 +10,12 @@ interface ConfigResponse {
   settings: Settings
 }
 
+/*
+  Settings = {
+    rateprice: number
+  }
+*/
+
 const config: AxiosRequestConfig = {
   headers: {
     'Content-Type': 'application/json'

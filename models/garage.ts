@@ -4,7 +4,7 @@ import {Schema, model} from 'mongoose';
   Sum every hasPaid = false when any clients comes to pay the total.
 */
 
-const CheckInOutSchema: Schema = new Schema({
+const GarageSchema: Schema = new Schema({
     checkin:{
       type: Date,
       required:true,
@@ -30,6 +30,9 @@ const CheckInOutSchema: Schema = new Schema({
       type: Boolean,
       default: false,
     },
+    totalAmount: {
+      type: Number,
+    },
     status: {
       type: Number,
       default: 1,
@@ -37,4 +40,4 @@ const CheckInOutSchema: Schema = new Schema({
 });
 
 
-module.exports = model("checkin-out",CheckInOutSchema);
+module.exports = model("checkin-out",GarageSchema);
