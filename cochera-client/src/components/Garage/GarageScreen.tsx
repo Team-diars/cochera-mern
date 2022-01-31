@@ -4,12 +4,14 @@ import Icon from '@chakra-ui/icon'
 import { Box, Container, Text } from '@chakra-ui/layout'
 import React, { useRef } from 'react'
 import { FiPlus, FiUserPlus } from 'react-icons/fi'
+import { AddGarageCar } from './AddGarageCar'
 import {GarageTable} from './Table'
 
 export const GarageScreen = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure()
-  const initialRef = useRef<HTMLInputElement>(null)
-  const finalRef = useRef<HTMLHeadingElement>(null)
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const initialRef = useRef<HTMLInputElement>(null);
+  const finalRef = useRef<HTMLHeadingElement>(null);
+  console.log("isOpen: ",isOpen)
   return (
     <Container maxW='container.xl' padding="10">
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={5}>
@@ -26,6 +28,9 @@ export const GarageScreen = () => {
         </Button>
       </Box>
       <GarageTable/>
+      {
+        (isOpen) && <AddGarageCar initialRef={initialRef} finalRef={finalRef} isOpen={isOpen} onClose={onClose}/>
+      }
     </Container>
   )
 }
