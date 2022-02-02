@@ -21,6 +21,8 @@ import { Switch } from '@chakra-ui/switch'
 import { AiOutlineSearch } from 'react-icons/ai'
 import {BiTimeFive} from 'react-icons/bi'
 import { GarageCar } from '../../state/actions/garage'
+import { SearchWrapper } from './SearchWrapper'
+import { CarItem } from './CarItem'
 
 
 interface CarProps {
@@ -52,7 +54,7 @@ export const AddGarageCar: React.FC<CarProps> = ({initialRef, finalRef, isOpen, 
   return (
     <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose} motionPreset='slideInBottom' size={'md'}>
       <ModalOverlay />
-      <ModalContent>
+      <ModalContent maxW="48rem">
         <style>
           {
           `.react-datepicker-wrapper {            
@@ -116,7 +118,7 @@ export const AddGarageCar: React.FC<CarProps> = ({initialRef, finalRef, isOpen, 
                 />
               </InputGroup>
             </FormControl>
-            <FormControl mt={4} isRequired>
+            <FormControl mt={4} isRequired position={"relative"}>
               <FormLabel>Auto</FormLabel>
               <InputGroup mt={4}>
                 <InputLeftElement
@@ -126,7 +128,7 @@ export const AddGarageCar: React.FC<CarProps> = ({initialRef, finalRef, isOpen, 
                   children={<AiOutlineSearch color='gray.300' />}
                 />
                   <Input
-                    type="text"
+                    type="search"
                     name="car"
                     placeholder="Buscar.."
                     onChange={onChange}
@@ -134,6 +136,24 @@ export const AddGarageCar: React.FC<CarProps> = ({initialRef, finalRef, isOpen, 
                     autoComplete='off'
                   />
                 </InputGroup>
+                {
+                  (formData.car.length > 0) && <SearchWrapper>
+                    <CarItem image="image-1642978527378.png" 
+                             brand="Toyota" 
+                             licenceplate='ABC-123' 
+                             color='#222'
+                             model="Faris"
+                             type='Auto'
+                             customer='Hector Herreraaaaa' />
+                    <CarItem image="image-1642978527378.png" 
+                             brand="Toyota" 
+                             licenceplate='ABC-123' 
+                             color='#222'
+                             model="Faris"
+                             type='Auto'
+                             customer='Hector Herreraaaaa' />                             
+                  </SearchWrapper>
+                }
             </FormControl>
             <FormControl mt={4}>
               <Box display="flex" justifyContent="space-between" alignItems="center">
