@@ -20,6 +20,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { Switch } from '@chakra-ui/switch'
 import { AiOutlineSearch } from 'react-icons/ai'
 import {BiTimeFive} from 'react-icons/bi'
+import { GarageCar } from '../../state/actions/garage'
 
 
 interface CarProps {
@@ -31,18 +32,16 @@ interface CarProps {
 
 export const AddGarageCar: React.FC<CarProps> = ({initialRef, finalRef, isOpen, onClose}) => {
   const dispatch = useDispatch();
-  const [checkin, setCheckIn] = useState<Date>(new Date());
+  // const [checkin, setCheckIn] = useState<Date>(new Date());
   const [customprice, setCustomPrice] = useState<boolean>(false);
-  const [formData, setFormData] = useState<Car>({
-    _id: "",
-    image:[],
-    brand: "",
-    model:"",
-    licenceplate:"",
-    color: "#000"
+  const [formData, setFormData] = useState<GarageCar>({
+    checkin: new Date(),
+    car: "",
+    hasLeftKeys:false,
+    hasPaid: false,
+    customprice: 0
   })
-  // const [image, setImage] = useState("");
-  const {image, brand, color, licenceplate, model} = formData;
+  // const {checkin, car, hasLeftKeys, hasPaid} = formData;
   const onChange = (e: any) => {
     e.preventDefault();
     setFormData({
@@ -69,6 +68,7 @@ export const AddGarageCar: React.FC<CarProps> = ({initialRef, finalRef, isOpen, 
           .react-datepicker__navigation-icon::before{
             width:12px;
             height:12px;
+            top:12px;
           }
           .react-datepicker__input-container{
             border-radius: 0.375rem;
@@ -101,8 +101,14 @@ export const AddGarageCar: React.FC<CarProps> = ({initialRef, finalRef, isOpen, 
                 />
                 <DatePicker
                   wrapperClassName="datepicker-react"
-                  selected={checkin}
-                  onChange={(date: Date) => setCheckIn(date)}
+                  selected={formData.checkin}
+                  onChange={(date: Date) => {
+                    const {checkin, ...rest} = formData;
+                    setFormData({
+                      checkin: date,
+                      ...rest
+                    })
+                  }}
                   timeInputLabel="Time:"
                   dateFormat="dd/MM/yyyy h:mm aa"
                   showTimeInput 
@@ -110,7 +116,7 @@ export const AddGarageCar: React.FC<CarProps> = ({initialRef, finalRef, isOpen, 
                 />
               </InputGroup>
             </FormControl>
-            <FormControl mt={4}>
+            <FormControl mt={4} isRequired>
               <FormLabel>Auto</FormLabel>
               <InputGroup mt={4}>
                 <InputLeftElement
@@ -121,8 +127,11 @@ export const AddGarageCar: React.FC<CarProps> = ({initialRef, finalRef, isOpen, 
                 />
                   <Input
                     type="text"
-                    name="appname"
-                    placeholder="Placa del auto"
+                    name="car"
+                    placeholder="Buscar.."
+                    onChange={onChange}
+                    value={formData.car}
+                    autoComplete='off'
                   />
                 </InputGroup>
             </FormControl>
@@ -148,6 +157,7 @@ export const AddGarageCar: React.FC<CarProps> = ({initialRef, finalRef, isOpen, 
                     type="text"
                     name="appname"
                     placeholder="Precio Tarifa"
+                    autoComplete='off'
                   />
                 </InputGroup>
               }

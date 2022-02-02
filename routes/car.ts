@@ -1,6 +1,7 @@
 import Router from "express";
 import { check } from "express-validator";
 const {
+  getAllCars,
   getCars,
   getSingleCar,
   registerCar,
@@ -13,7 +14,7 @@ const { validateJWT } = require("../middleware/validate-jwt");
 const router = Router();
 
 // router.use(validateJWT);
-
+router.get("/",getAllCars)
 router.get("/:id",getCars);
 router.get("/show/:id",getSingleCar)
 router.post(
@@ -27,7 +28,6 @@ router.post(
   ],
   registerCar
 );
-
 router.put(
   "/edit/:customerid",
   [
@@ -39,7 +39,6 @@ router.put(
   ],
   updateCar
 );
-
 router.delete(
   "/delete/:id",
   deleteCar

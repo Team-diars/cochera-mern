@@ -3,6 +3,14 @@ import { Car as ICar, Customer, CustomRequest } from "../types/customer";
 const Car = require("../models/car");
 const Customer = require("../models/customer");
 
+const getAllCars = async(req: CustomRequest<ICar> , res: Response) => {
+  const cars = await Car.find({ status: 1 });
+  return res.status(200).json({
+    ok: true,
+    cars: cars,
+  });
+}
+
 const getCars = async (req: CustomRequest<ICar>, res: Response) => {
   const { id } = req.params;
   const customer = await Customer.findOne({ _id: id, status: 1 });
@@ -153,6 +161,7 @@ const deleteCar = async (req: CustomRequest<ICar>, res: Response) => {
   }
 };
 module.exports = {
+  getAllCars,
   getCars,
   registerCar,
   updateCar,
