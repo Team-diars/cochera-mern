@@ -2,7 +2,7 @@ import { Box, Flex, Image, Tag, Text, Tooltip } from '@chakra-ui/react';
 import React from 'react';
 
 interface ICar {
-  image: string,
+  image: Array<string>,
   brand: string,
   licenceplate: string,
   color: string,
@@ -12,8 +12,19 @@ interface ICar {
 }
 
 export const CarItem: React.FC<ICar> = ({image, brand, licenceplate, color, model, type, customer}) => {
-  return <Flex borderRadius={6} background={'#fff'} borderWidth={1} borderColor={'#ccc'} mb={3} cursor={"pointer"}>
-    <Image src={`/images/${image}`} width={"30%"} height={"100px"} p={"0.5rem"}/>
+  return <Flex borderRadius={6} 
+               background={'#fff'} 
+               borderWidth={1} 
+               borderColor={'#ccc'} 
+               mb={3} 
+               cursor={"pointer"} 
+               _hover={{
+                  filter: "drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))",
+                  transition:"0.3s",
+                  transform: "scaleY(1.02)",
+                  transformOrigin: "bottom"
+               }}>
+    <Image src={`/images/${image[0]}`} width={"30%"} height={"100px"} p={"0.5rem"}/>
     <Box display={'flex'} flexDirection={'column'} justifyContent={'space-between'} p={"1rem"} minW={"30%"}>
       <Flex>
         <Text fontWeight={'bold'} minW="100px">Marca: </Text>

@@ -2,19 +2,13 @@ import { Button } from '@chakra-ui/button'
 import { FormControl, FormErrorMessage, FormLabel } from '@chakra-ui/form-control'
 import { Input, InputGroup, InputLeftElement } from '@chakra-ui/input'
 import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from '@chakra-ui/modal'
-import React, { LegacyRef, useRef, useState } from 'react'
+import React, { LegacyRef, useEffect, useMemo, useRef, useState } from 'react'
 import { Car, CarState } from '../../state/actions/car'
 import { ChromePicker, SketchPicker } from 'react-color';
 import reactCSS from 'reactcss'
 import { Box, Stack, Text } from '@chakra-ui/layout'
-import axios, { AxiosError } from 'axios'
-import { FiImage } from 'react-icons/fi'
-import { Image } from '@chakra-ui/image'
-import { Spinner } from '@chakra-ui/spinner'
-import { useParams } from 'react-router'
 import { RootState } from '../../state'
 import { useDispatch, useSelector } from 'react-redux'
-import { addCar } from '../../state/action-creators/car'
 import DatePicker from 'react-datepicker'
 import "react-datepicker/dist/react-datepicker.css";
 import { Switch } from '@chakra-ui/switch'
@@ -23,7 +17,7 @@ import {BiTimeFive} from 'react-icons/bi'
 import { GarageCar } from '../../state/actions/garage'
 import { SearchWrapper } from './SearchWrapper'
 import { CarItem } from './CarItem'
-
+import { getAllCars } from '../../state/action-creators/car'
 
 interface CarProps {
   initialRef: LegacyRef<HTMLInputElement>,
@@ -36,6 +30,7 @@ export const AddGarageCar: React.FC<CarProps> = ({initialRef, finalRef, isOpen, 
   const dispatch = useDispatch();
   // const [checkin, setCheckIn] = useState<Date>(new Date());
   const [customprice, setCustomPrice] = useState<boolean>(false);
+  const state: CarState = useSelector((state: RootState) => state.cars);
   const [formData, setFormData] = useState<GarageCar>({
     checkin: new Date(),
     car: "",
@@ -51,6 +46,13 @@ export const AddGarageCar: React.FC<CarProps> = ({initialRef, finalRef, isOpen, 
       [e.target.name]: e.target.value
     });
   }
+  useEffect(() => {
+    const getCars = () => dispatch(getAllCars());
+    getCars();
+  },[dispatch])
+  const filteredCars = useMemo(() => 
+  state.cars.filter((car: Car) => (car.licenceplate) && car.licenceplate.toLowerCase().includes(formData.car.toLowerCase())),
+  [state.cars, formData.car]);
   return (
     <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose} motionPreset='slideInBottom' size={'md'}>
       <ModalOverlay />
@@ -94,7 +96,7 @@ export const AddGarageCar: React.FC<CarProps> = ({initialRef, finalRef, isOpen, 
         <ModalBody >
             <FormControl isRequired>
               <FormLabel>Horario Entrada</FormLabel>
-              <InputGroup mt={4}>
+              <InputGroup>
                 <InputLeftElement
                   pointerEvents='none'
                   color='gray.300'
@@ -120,7 +122,7 @@ export const AddGarageCar: React.FC<CarProps> = ({initialRef, finalRef, isOpen, 
             </FormControl>
             <FormControl mt={4} isRequired position={"relative"}>
               <FormLabel>Auto</FormLabel>
-              <InputGroup mt={4}>
+              <InputGroup>
                 <InputLeftElement
                   pointerEvents='none'
                   color='gray.300'
@@ -130,7 +132,7 @@ export const AddGarageCar: React.FC<CarProps> = ({initialRef, finalRef, isOpen, 
                   <Input
                     type="search"
                     name="car"
-                    placeholder="Buscar.."
+                    placeholder="Buscar por placa..."
                     onChange={onChange}
                     value={formData.car}
                     autoComplete='off'
@@ -138,20 +140,17 @@ export const AddGarageCar: React.FC<CarProps> = ({initialRef, finalRef, isOpen, 
                 </InputGroup>
                 {
                   (formData.car.length > 0) && <SearchWrapper>
-                    <CarItem image="image-1642978527378.png" 
-                             brand="Toyota" 
-                             licenceplate='ABC-123' 
-                             color='#222'
-                             model="Faris"
-                             type='Auto'
-                             customer='Hector Herreraaaaa' />
-                    <CarItem image="image-1642978527378.png" 
-                             brand="Toyota" 
-                             licenceplate='ABC-123' 
-                             color='#222'
-                             model="Faris"
-                             type='Auto'
-                             customer='Hector Herreraaaaa' />                             
+                    {
+                      filteredCars.map(({image, brand, color, model, licenceplate, type, customer}: Car): JSX.Element => (
+                        <CarItem image={image}
+                             brand={brand}
+                             licenceplate={licenceplate}
+                             color={color}
+                             model={model}
+                             type={type}
+                             customer={customer}/>
+                      ))
+                    }
                   </SearchWrapper>
                 }
             </FormControl>
@@ -162,7 +161,7 @@ export const AddGarageCar: React.FC<CarProps> = ({initialRef, finalRef, isOpen, 
                   <FormLabel htmlFor='email-alerts' mb='0'>
                     ¿Dejo Llaves?
                   </FormLabel>
-                  <Switch id='email-alerts' />
+                  <Switch id='email-alerts' size="lg" />
                 </FormControl>
               </Box>
               {
