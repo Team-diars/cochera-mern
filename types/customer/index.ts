@@ -6,7 +6,8 @@ export interface Car extends mongoose.Document{
   model: string,
   licenceplate: string,
   color: string,
-  image: Array<string>
+  image: Array<string>,
+  customer: string,
 }
 
 export interface Customer extends mongoose.Document{

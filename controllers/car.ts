@@ -43,7 +43,6 @@ const getCars = async (req: CustomRequest<ICar>, res: Response) => {
   return res.status(200).json({
     ok: true,
     cars: cars,
-    any:"2131"
   });
 };
 
