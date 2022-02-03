@@ -15,6 +15,7 @@ import { useParams } from 'react-router'
 import { RootState } from '../../state'
 import { useDispatch, useSelector } from 'react-redux'
 import { addCar } from '../../state/action-creators/car'
+import { Select } from '@chakra-ui/react'
 var { EditableInput } = require('react-color/lib/components/common');
 
 interface CarProps {
@@ -33,7 +34,9 @@ export const AddCar: React.FC<CarProps> = ({initialRef, finalRef, isOpen, onClos
     brand: "",
     model:"",
     licenceplate:"",
-    color: "#000"
+    color: "#000",
+    type: "",
+    customer: "",
   })
   const imageRef = useRef<any>(null);
   const [uploading, setUploading] = useState(false);
@@ -44,10 +47,10 @@ export const AddCar: React.FC<CarProps> = ({initialRef, finalRef, isOpen, onClos
   })
   const saveCar = (e: any) => {
     e.preventDefault();
-    const {_id, ...rest} = formData;
+    const {customer, ...rest} = formData;
     if(customerid) {
       dispatch(addCar({
-        _id: customerid,
+        customer: customerid,
         ...rest
       }))
       onClose();
@@ -177,7 +180,15 @@ export const AddCar: React.FC<CarProps> = ({initialRef, finalRef, isOpen, onClos
             </FormControl>
           </Box>
           <Box w="50%">
-            <FormControl>
+            <FormControl isRequired>
+              <FormLabel>Tipo</FormLabel>
+              <Select placeholder='Seleccionar tipo'>
+                <option value='auto' selected>Automovil</option>
+                <option value='mototaxi'>Mototaxi</option>
+                <option value='motolineal'>Moto Lineal</option>
+              </Select>
+            </FormControl>
+            <FormControl mt={4}>
               <FormLabel>Imagen</FormLabel>
               <InputGroup>
                 <InputLeftElement

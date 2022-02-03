@@ -35,11 +35,11 @@ export const CarsScreen: React.FC = () => {
       const retrieveSingleCustomer = (id: string) => dispatch(getSingleCustomer(id));
       retrieveSingleCustomer(customerid);
     }
-  },[customerid])
+  },[dispatch, customerid])
   useEffect(() => {
     const retrieveCars = () => customerid && dispatch(getCars(customerid));
     retrieveCars();
-  },[dispatch])
+  },[dispatch, customerid])
   return (
     <Container maxW='container.xl' padding="10">
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={10}>

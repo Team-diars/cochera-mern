@@ -32,7 +32,9 @@ export const EditCar: React.FC<CarProps> = ({initialRef, finalRef, isOpen, onClo
     brand: "",
     model:"",
     licenceplate:"",
-    color: "#000"
+    color: "#000",
+    type: "",
+    customer: "",
   })
   const imageRef = useRef<any>(null);
   const [uploading, setUploading] = useState(false);
@@ -147,17 +149,19 @@ export const EditCar: React.FC<CarProps> = ({initialRef, finalRef, isOpen, onClo
     }
   };
   useEffect(() => {
-    if(!state.loading){
+    if(!state.loading && state.car){
       setFormData({
-        _id: state.car?._id || "",
-        brand: state.car?.brand || "",
-        image: state.car?.image || [],
-        color: state.car?.color || "#000",
-        licenceplate: state.car?.licenceplate || "",
-        model: state.car?.model || ""
+        _id: state.car._id || "",
+        brand: state.car.brand || "",
+        image: state.car.image || [],
+        color: state.car.color || "#000",
+        licenceplate: state.car.licenceplate || "",
+        model: state.car.model || "",
+        type: state.car.type || "",
+        customer: state.car.customer || "",
       })
     }
-  },[state.car])
+  },[state.car, state.loading])
   return (
     <Modal finalFocusRef={finalRef} isOpen={true} onClose={onClosePopup} motionPreset='slideInBottom' size={'md'}>
       <ModalOverlay />
