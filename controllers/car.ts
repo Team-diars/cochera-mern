@@ -1,14 +1,33 @@
-import { Request, Response } from "express";
-import { Car as ICar, Customer, CustomRequest } from "../types/customer";
-const Car = require("../models/car");
 const Customer = require("../models/customer");
+const Car = require("../models/car");
+import { Request, Response } from "express";
+import { Car as ICar, Customer as ICustomer, CustomRequest } from "../types/customer";
 
 const getAllCars = async(req: CustomRequest<ICar> , res: Response) => {
   const cars = await Car.find({ status: 1 });
-  return res.status(200).json({
-    ok: true,
-    cars: cars,
-  });
+  const updatedCars = cars.map(async(car: ICar) => {
+    let {customer, brand, model, licenceplate, color, image} = car;
+    let {fullname} = await Customer.findOne({ _id: customer, status:1 }) as ICustomer;
+    return {
+      customer: fullname,
+      brand, 
+      model, 
+      licenceplate, 
+      color, 
+      image
+    }
+  })
+  Promise.all(updatedCars).then((response: ICar[]) => {
+    return res.status(200).json({
+      ok: true,
+      cars: response,
+    });
+  }).catch((err: Error) => {
+    res.status(500).json({
+      ok: false,
+      msg: `Hubo un error: ${err.message}`,
+    });
+  })
 }
 
 const getCars = async (req: CustomRequest<ICar>, res: Response) => {
