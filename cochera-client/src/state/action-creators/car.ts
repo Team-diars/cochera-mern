@@ -15,6 +15,30 @@ const config: AxiosRequestConfig = {
   }
 }
 
+export const getAllCars = () => async(dispatch: Dispatch<CarAction | Action>) => {
+  dispatch({
+    type: ActionCarType.CLEAR_CARS,
+  })
+  try{
+    const res = await axios.get<CarResponse>(`http://localhost:8000/api/car/`,config)
+    dispatch({
+      type: ActionCarType.RETRIEVE_ALL_CARS,
+      payload: res.data.cars
+    })
+  }catch(err){
+    let error = err as AxiosError;
+    if (error.response) {
+      dispatch({
+        type: ActionCarType.RETRIEVE_ERROR,
+        payload: {
+          msg: error.response.data,
+          status: error.response.status
+        }
+      })
+    }
+  }
+}
+
 export const getCars = (id: string) => async(dispatch: Dispatch<CarAction | Action>) => {
   dispatch({
     type: ActionCarType.CLEAR_CARS,

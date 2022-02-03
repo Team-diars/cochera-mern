@@ -7,7 +7,9 @@ export interface Car {
   model: string,
   licenceplate: string,
   color: string,
-  image: Array<string>
+  image: Array<string>,
+  type: string,
+  customer: string,
 }
 
 export interface CarState {
@@ -27,6 +29,10 @@ interface CreateError {
 }
 interface RetrieveAction {
   type: ActionCarType.RETRIEVE,
+  payload:Array<Car>
+}
+interface RetrieveAllCarsAction {
+  type: ActionCarType.RETRIEVE_ALL_CARS,
   payload:Array<Car>
 }
 interface RetrieveError {
@@ -66,4 +72,4 @@ export type CarAction = RetrieveAction | ClearCars | RetrieveError |
                              CreateAction | CreateError | 
                              DeleteAction | DeleteError |
                              EditAction | EditError |
-                             RetrieveSingleCarAction | RetrieveSingleCarError;
+                             RetrieveAllCarsAction | RetrieveSingleCarAction | RetrieveSingleCarError;
