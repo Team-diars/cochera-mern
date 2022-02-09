@@ -30,6 +30,7 @@ export const AddGarageCar: React.FC<CarProps> = ({initialRef, finalRef, isOpen, 
   const dispatch = useDispatch();
   // const [checkin, setCheckIn] = useState<Date>(new Date());
   const [customprice, setCustomPrice] = useState<boolean>(false);
+  const [foundCar, setFoundCar] = useState<boolean>(false);
   const state: CarState = useSelector((state: RootState) => state.cars);
   const [formData, setFormData] = useState<GarageCar>({
     checkin: new Date(),
@@ -39,8 +40,20 @@ export const AddGarageCar: React.FC<CarProps> = ({initialRef, finalRef, isOpen, 
     customprice: 0
   })
   // const {checkin, car, hasLeftKeys, hasPaid} = formData;
+  const validateLicencePlate = (licenceplate: string) => {
+    if(licenceplate.length === 7){
+      const response = state.cars.find((car: Car) => (car.licenceplate === licenceplate));
+      if (response){
+        // setFoundCar(response)
+      }
+
+    }
+  }
   const onChange = (e: any) => {
     e.preventDefault();
+    if (e.target.name === "car"){
+      validateLicencePlate(e.target.value)
+    }
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
@@ -139,7 +152,7 @@ export const AddGarageCar: React.FC<CarProps> = ({initialRef, finalRef, isOpen, 
                   />
                 </InputGroup>
                 {
-                  (formData.car.length > 0) && <SearchWrapper>
+                  (formData.car.length > 0 && formData.car.length < 7) && <SearchWrapper>
                     {
                       filteredCars.map(({image, brand, color, model, licenceplate, type, customer}: Car): JSX.Element => (
                         <CarItem image={image}
@@ -148,10 +161,17 @@ export const AddGarageCar: React.FC<CarProps> = ({initialRef, finalRef, isOpen, 
                              color={color}
                              model={model}
                              type={type}
-                             customer={customer}/>
+                             customer={customer}
+                             formData={formData}
+                             setFormData={setFormData}/>
                       ))
                     }
                   </SearchWrapper>
+                }
+                {
+                  isError && (
+                    <FormErrorMessage>Licence Plate not found.</FormErrorMessage>
+                  )
                 }
             </FormControl>
             <FormControl mt={4}>
