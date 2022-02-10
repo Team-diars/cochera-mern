@@ -18,6 +18,7 @@ import { GarageCar } from '../../state/actions/garage'
 import { SearchWrapper } from './SearchWrapper'
 import { CarItem } from './CarItem'
 import { getAllCars } from '../../state/action-creators/car'
+import { addGarageCar } from '../../state/action-creators/garage'
 
 interface CarProps {
   initialRef: LegacyRef<HTMLInputElement>,
@@ -30,7 +31,7 @@ export const AddGarageCar: React.FC<CarProps> = ({initialRef, finalRef, isOpen, 
   const dispatch = useDispatch();
   // const [checkin, setCheckIn] = useState<Date>(new Date());
   const [customprice, setCustomPrice] = useState<boolean>(false);
-  const [foundCar, setFoundCar] = useState<boolean>(false);
+  const [carIsNotFound, setCarIsNotFound] = useState<boolean>(false);
   const state: CarState = useSelector((state: RootState) => state.cars);
   const [formData, setFormData] = useState<GarageCar>({
     checkin: new Date(),
@@ -39,17 +40,22 @@ export const AddGarageCar: React.FC<CarProps> = ({initialRef, finalRef, isOpen, 
     hasPaid: false,
     customprice: 0
   })
-  // const {checkin, car, hasLeftKeys, hasPaid} = formData;
+  const handleSave = (): void => {
+    console.log('saving!');
+    dispatch(addGarageCar(formData));
+    onClose();
+  }
   const validateLicencePlate = (licenceplate: string) => {
     if(licenceplate.length === 7){
-      const response = state.cars.find((car: Car) => (car.licenceplate === licenceplate));
+      const response = state.cars.find((car: Car) => (car.licenceplate.toLowerCase() === licenceplate.toLowerCase()));
       if (response){
-        // setFoundCar(response)
+        setCarIsNotFound(false);
+      }else{
+        setCarIsNotFound(true);
       }
-
     }
   }
-  const onChange = (e: any) => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     e.preventDefault();
     if (e.target.name === "car"){
       validateLicencePlate(e.target.value)
@@ -66,13 +72,18 @@ export const AddGarageCar: React.FC<CarProps> = ({initialRef, finalRef, isOpen, 
   const filteredCars = useMemo(() => 
   state.cars.filter((car: Car) => (car.licenceplate) && car.licenceplate.toLowerCase().includes(formData.car.toLowerCase())),
   [state.cars, formData.car]);
+
   return (
     <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose} motionPreset='slideInBottom' size={'md'}>
       <ModalOverlay />
       <ModalContent maxW="48rem">
         <style>
           {
-          `.react-datepicker-wrapper {            
+          `
+          .react-datepicker-popper{
+            z-index:4;
+          }
+          .react-datepicker-wrapper {            
             width: 100%;
             border-radius: 0.375rem;
             padding:0;
@@ -133,7 +144,7 @@ export const AddGarageCar: React.FC<CarProps> = ({initialRef, finalRef, isOpen, 
                 />
               </InputGroup>
             </FormControl>
-            <FormControl mt={4} isRequired position={"relative"}>
+            <FormControl mt={4} isRequired position={"relative"} isInvalid={carIsNotFound}>
               <FormLabel>Auto</FormLabel>
               <InputGroup>
                 <InputLeftElement
@@ -149,13 +160,21 @@ export const AddGarageCar: React.FC<CarProps> = ({initialRef, finalRef, isOpen, 
                     onChange={onChange}
                     value={formData.car}
                     autoComplete='off'
+                    maxLength={7}
                   />
                 </InputGroup>
+                {
+                  (carIsNotFound) && (
+                    <FormErrorMessage>No se encuentra la placa</FormErrorMessage>
+                  )
+                }
                 {
                   (formData.car.length > 0 && formData.car.length < 7) && <SearchWrapper>
                     {
                       filteredCars.map(({image, brand, color, model, licenceplate, type, customer}: Car): JSX.Element => (
-                        <CarItem image={image}
+                        <CarItem 
+                             key={licenceplate}
+                             image={image}
                              brand={brand}
                              licenceplate={licenceplate}
                              color={color}
@@ -167,11 +186,6 @@ export const AddGarageCar: React.FC<CarProps> = ({initialRef, finalRef, isOpen, 
                       ))
                     }
                   </SearchWrapper>
-                }
-                {
-                  isError && (
-                    <FormErrorMessage>Licence Plate not found.</FormErrorMessage>
-                  )
                 }
             </FormControl>
             <FormControl mt={4}>
@@ -206,7 +220,7 @@ export const AddGarageCar: React.FC<CarProps> = ({initialRef, finalRef, isOpen, 
           <Button mr={3} onClick={onClose}>
             Cerrar
           </Button>
-          <Button colorScheme='blue' >Guardar</Button>
+          <Button colorScheme='blue' onClick={handleSave}>Guardar</Button>
         </ModalFooter>
       </ModalContent>
     </Modal>

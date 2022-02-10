@@ -60,7 +60,7 @@ export const getSingleGarageCar = (id: string) => async(dispatch: Dispatch<Garag
     }
   }
 }
-export const addGarageCar = (formData: Car) => async(dispatch: Dispatch<GarageAction | Action>) => {
+export const addGarageCar = (formData: GarageCar) => async(dispatch: Dispatch<GarageAction | Action>) => {
   try {
     const res = await axios.post('http://localhost:8000/api/garage/create',{
       ...formData

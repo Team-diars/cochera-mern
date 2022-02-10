@@ -45,7 +45,7 @@ export const AddCar: React.FC<CarProps> = ({initialRef, finalRef, isOpen, onClos
   const [picker, setPicker] = useState({
     displayColorPicker: false,
   })
-  const saveCar = (e: any) => {
+  const saveCar = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     const {customer, ...rest} = formData;
     if(customerid) {
@@ -250,7 +250,7 @@ export const AddCar: React.FC<CarProps> = ({initialRef, finalRef, isOpen, onClos
           <Button mr={3} onClick={onClose}>
             Cerrar
           </Button>
-          <Button colorScheme='blue' onClick={(e) => saveCar(e)}>Guardar</Button>
+          <Button colorScheme='blue' onClick={() => saveCar}>Guardar</Button>
         </ModalFooter>
       </ModalContent>
     </Modal>
