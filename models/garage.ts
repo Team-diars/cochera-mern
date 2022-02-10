@@ -40,4 +40,4 @@ const GarageSchema: Schema = new Schema({
 });
 
 
-module.exports = model("checkin-out",GarageSchema);
+module.exports = model("garage",GarageSchema);

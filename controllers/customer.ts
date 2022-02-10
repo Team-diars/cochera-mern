@@ -56,7 +56,7 @@ const registerCustomer = async (req: Request, res: Response) => {
     await customer.save();
     return res.status(200).json({
       ok: true,
-      message: "Cliente registrado exitosamente",
+      msg: "Cliente registrado exitosamente",
       customer: {
         id: customer._id,
         fullname: customer.fullname,
@@ -90,7 +90,7 @@ const updateCustomer = async (req: Request, res: Response) => {
     });
     return res.status(200).json({
       ok: true,
-      message: "Cliente actualizado exitosamente",
+      msg: "Cliente actualizado exitosamente",
       customer: {
         id: customerUpdated._id,
         fullname: customerUpdated.fullname,
@@ -125,7 +125,7 @@ const deleteCustomer = async (req: Request, res: Response) => {
     );
     return res.status(200).json({
       ok: true,
-      message: "Cliente eliminado exitosamente",
+      msg: "Cliente eliminado exitosamente",
     });
   } catch (error) {
     return res.status(500).json({

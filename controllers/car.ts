@@ -1,7 +1,8 @@
 const Customer = require("../models/customer");
 const Car = require("../models/car");
 import { Request, Response } from "express";
-import { Car as ICar, Customer as ICustomer, CustomRequest } from "../types/customer";
+import { Customer as ICustomer, CustomRequest } from "../types/customer";
+import { Car as ICar } from '../types/car'
 
 const getAllCars = async(req: CustomRequest<ICar> , res: Response) => {
   const cars = await Car.find({ status: 1 });
@@ -65,11 +66,12 @@ const registerCar = async (req: CustomRequest<ICar>, res: Response) => {
   try {
     const { _id, licenceplate, brand, model, color, image } = req.body;
     const customer = await Customer.findOne({ _id, status: 1 });
-    if (!customer)
+    if (!customer){
       return res.status(404).json({
         ok: false,
         msg: "El cliente no existe",
       });
+    }
     const isPlateRegistered = await Car.findOne({
       licenceplate: licenceplate,
       status: 1,
@@ -92,7 +94,7 @@ const registerCar = async (req: CustomRequest<ICar>, res: Response) => {
     await newCar.save();
     return res.status(200).json({
       ok: true,
-      message: "Carro registrado exitosamente",
+      msg: "Carro registrado exitosamente",
       car: {
         id: newCar._id,
         brand: newCar.brand,
@@ -169,7 +171,7 @@ const deleteCar = async (req: CustomRequest<ICar>, res: Response) => {
     await car.save();
     return res.status(200).json({
       ok: true,
-      message: "Auto eliminado exitosamente",
+      msg: "Auto eliminado exitosamente",
     });
   } catch (error) {
     return res.status(500).json({

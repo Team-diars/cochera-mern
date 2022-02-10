@@ -10,7 +10,6 @@ const {
 } = require("../controllers/car");
 const { fieldValidation } = require("../middleware/field-validation");
 const { validateJWT } = require("../middleware/validate-jwt");
-
 const router = Router();
 
 // router.use(validateJWT);
