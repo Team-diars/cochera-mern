@@ -2,7 +2,7 @@ const Customer = require("../models/customer");
 const Car = require("../models/car");
 import { Request, Response } from "express";
 import { Customer as ICustomer, CustomRequest } from "../types/customer";
-import { Car as ICar } from '../types/car'
+import { ICar } from '../types/car'
 
 const getAllCars = async(req: CustomRequest<ICar> , res: Response) => {
   const cars = await Car.find({ status: 1 });

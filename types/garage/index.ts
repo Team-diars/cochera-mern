@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-export interface GarageCar extends mongoose.Document{
+export interface IGarageCar extends mongoose.Document{
   id?: string,
   checkin: Date,
   checkout?: Date,

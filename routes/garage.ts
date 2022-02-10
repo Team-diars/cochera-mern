@@ -8,4 +8,11 @@ const { validateJWT } = require("../middleware/validate-jwt");
 const router = Router();
 
 
-router.get('/create', createGarageCar)
+router.post('/create',
+  [
+    check("checkin", "La entrada es requerida").not().isEmpty(),
+    check("car", "La placa es requerido").not().isEmpty(),
+    fieldValidation,
+  ],createGarageCar)
+
+module.exports = router;

@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 
-export interface Car extends mongoose.Document{
+export interface ICar extends mongoose.Document{
   _id: string,
   brand: string,
   model: string,
