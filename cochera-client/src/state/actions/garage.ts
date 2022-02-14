@@ -1,11 +1,12 @@
 import { ActionGarageType } from "../action-types/garage";
+import { Car } from "./car";
 import {Error} from './index'
 
 export interface GarageCar {
   id?: string,
   checkin: Date,
   checkout?: Date,
-  car: string,
+  car: Car | string,
   hasLeftKeys: boolean,
   hasPaid: boolean,
   customprice: number,

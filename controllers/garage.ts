@@ -45,7 +45,30 @@ const createGarageCar = async(req: CustomRequest<IGarageCar>, res: Response) => 
   }
 }
 const getGarageCars = async(req: CustomRequest<IGarageCar>, res: Response) => {
-
+  try {
+    const garageCars:IGarageCar[] = await GarageCar.find({ status:1 }).sort({_id:-1}).exec();
+    const cars: ICar[] = await Car.find({ status:1 });
+    // console.log("cars: ",cars)
+    return res.status(200).json({
+      ok:true,
+      cars: garageCars.map((garageCar: IGarageCar) => {
+        return {
+          id: garageCar._id,
+          checkin: garageCar.checkin,
+          checkout: (!garageCar.checkout) ? undefined : garageCar.checkout,
+          car: cars.find((car: ICar) => car._id.toString() === garageCar.car.toString()),
+          hasLeftKeys: garageCar.hasLeftKeys,
+          hasPaid: garageCar.hasPaid,
+          customprice: garageCar.customprice,
+        }
+      })
+    })
+  } catch (err) {
+    return res.status(500).json({
+      ok: false,
+      msg: "Ocurrio un error: " + err,
+    });
+  }
 }
 const updateGarageCar = async(req: CustomRequest<IGarageCar>, res: Response) => {
 

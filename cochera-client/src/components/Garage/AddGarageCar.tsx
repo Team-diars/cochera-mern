@@ -70,7 +70,7 @@ export const AddGarageCar: React.FC<CarProps> = ({initialRef, finalRef, isOpen, 
     getCars();
   },[dispatch])
   const filteredCars = useMemo(() => 
-  state.cars.filter((car: Car) => (car.licenceplate) && car.licenceplate.toLowerCase().includes(formData.car.toLowerCase())),
+  state.cars.filter((car: Car) => (typeof formData.car === 'string' && car.licenceplate) && car.licenceplate.toLowerCase().includes(formData.car.toLowerCase())),
   [state.cars, formData.car]);
 
   return (
@@ -158,7 +158,7 @@ export const AddGarageCar: React.FC<CarProps> = ({initialRef, finalRef, isOpen, 
                     name="car"
                     placeholder="Buscar por placa..."
                     onChange={onChange}
-                    value={formData.car}
+                    value={formData.car as string}
                     autoComplete='off'
                     maxLength={7}
                   />
@@ -169,7 +169,9 @@ export const AddGarageCar: React.FC<CarProps> = ({initialRef, finalRef, isOpen, 
                   )
                 }
                 {
-                  (formData.car.length > 0 && formData.car.length < 7) && <SearchWrapper>
+                  (typeof formData.car === 'string' && 
+                   formData.car.length > 0 && 
+                   formData.car.length < 7) && <SearchWrapper>
                     {
                       filteredCars.map(({image, brand, color, model, licenceplate, type, customer}: Car): JSX.Element => (
                         <CarItem 

@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 export interface IGarageCar extends mongoose.Document{
-  id?: string,
+  _id?: string,
   checkin: Date,
   checkout?: Date,
   car: string,

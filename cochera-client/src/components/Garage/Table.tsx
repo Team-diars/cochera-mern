@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react'
 import { Table, TableCaption, Tbody, Td, Tfoot, Th, Thead, Tr } from '@chakra-ui/table';
 import { Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/menu';
 import { FiEdit, FiEye, FiMoreVertical, FiXCircle } from 'react-icons/fi';
+import { BsFillCalendar2CheckFill } from 'react-icons/bs';
 import { AiFillCar } from 'react-icons/ai';
 import { Button, IconButton } from '@chakra-ui/button';
 import { Portal, forwardRef, Icon, Popover, PopoverCloseButton, PopoverHeader, PopoverTrigger, Badge, Text, Box, PopoverContent, PopoverArrow, PopoverBody, useDisclosure, Tooltip, Tag } from '@chakra-ui/react';
@@ -14,6 +15,8 @@ import { DateFormat } from '../../utils/Date';
 import MaterialTable from '@material-table/core'
 import { localizationTable, optionsTable, headerStyle, cellStyle } from '../../utils/Table';
 import { Link } from 'react-router-dom';
+import { getGarageCars } from '../../state/action-creators/garage';
+import { GarageCar, GarageState } from '../../state/actions/garage';
 
 
 export const ActionsButton = forwardRef(({ label, ...rest }, ref) => {
@@ -38,19 +41,19 @@ export const ActionsButton = forwardRef(({ label, ...rest }, ref) => {
 });
 
 export const GarageTable: React.FC = () => {
-  const data: CustomerState = useSelector((state: RootState) => state.customers);
+  const data: GarageState = useSelector((state: RootState) => state.garage);
   const dispatch = useDispatch();
   const {contextActions: {setIsOpen, setIdSelected}, contextState: {isOpen: isEditPopupOpen, idSelected}} = useSelectedContext();
 
   useEffect(() => {
-    const retrieveCustomers = () => dispatch(getCustomers());
-    retrieveCustomers();
+    const retrieveGarageCars = () => dispatch(getGarageCars());
+    retrieveGarageCars();
   },[dispatch])
   const removeCustomer = (id: string | null = null): void => {
     if (!id) return;
     dispatch(deleteCustomer(id));
   }
-  const updateCustomer = (id: string): void => {
+  const updateCustomer = (id: string | null = null): void => {
     setIdSelected(id);
     setIsOpen(true);
   }
@@ -60,34 +63,31 @@ export const GarageTable: React.FC = () => {
       const retrieveSingleCustomer = (id: string) => dispatch(getSingleCustomer(id));
       retrieveSingleCustomer(idSelected);
     }
-  },[idSelected])
+  },[idSelected, dispatch])
   
-  //console.log("idSelected: ",idSelected);
+  console.log("data: ",data.cars);
   return ( 
     <MaterialTable 
         options={optionsTable}
         localization={localizationTable}
         columns={[
-        { title: 'Nombre', field: 'fullname', headerStyle, cellStyle},
-        { title: 'Telefono', field: 'cellphone', type: 'numeric', headerStyle, cellStyle},
-        { title: 'Direccion', field: 'address', headerStyle, cellStyle},
-        { title: 'Registrado', field: 'date', render: (rowData: Payload) => {
-          return <DateFormat position="relative" date={rowData.date}/>
-        }, headerStyle, cellStyle},
-        { title: 'Carros', field: 'cars', render: (rowData: Payload) => {
-          return <Tooltip label='Ver Carros' bg='gray.300' color='black' hasArrow>
-            <Link to={`/cars/${rowData.id}`}>
+        { title: 'Cliente', field: 'fullname', headerStyle, cellStyle},
+        { title: 'Placa', field: 'car.licenceplate', type: 'numeric', headerStyle, cellStyle},
+        { title: 'Horario Entrada', field: 'checkin', headerStyle, cellStyle},
+        { title: 'Horario Salida', field: 'checkout', render: (rowData: GarageCar) => {
+          return <DateFormat position="relative" date={
+            (!rowData.checkout) ? (
               <Button size="sm" colorScheme="gray">
                 <Icon
-                  as={AiFillCar}
+                  as={BsFillCalendar2CheckFill}
                   h={[4]}
                   w={[4]}
                 />
               </Button>
-            </Link>
-          </Tooltip>
-        }, headerStyle, cellStyle },
-        { title: 'Acciones', field: 'actions', render: (rowData: Payload) => {
+            ) : rowData.checkout
+          }/>
+        }, headerStyle, cellStyle},
+        { title: 'Acciones', field: 'actions', render: (rowData: GarageCar) => {
             return <Menu isLazy placement="left-start">
               <MenuButton as={ActionsButton}>
               </MenuButton>
@@ -108,7 +108,7 @@ export const GarageTable: React.FC = () => {
             </Menu>
         }, headerStyle, cellStyle},
         ]}
-        data={data.customers}
+        data={data.cars}
     />    
   )
 }
