@@ -35,6 +35,7 @@ export const AddGarageCar: React.FC<CarProps> = ({initialRef, finalRef, isOpen, 
   const state: CarState = useSelector((state: RootState) => state.cars);
   const [formData, setFormData] = useState<GarageCar>({
     checkin: new Date(),
+    checkout: null,
     car: "",
     hasLeftKeys:false,
     hasPaid: false,

@@ -1,9 +1,10 @@
 import { Request, Response } from "express";
-import { CustomRequest } from "../types/customer";
+import { CustomRequest, ICustomer } from "../types/customer";
 import { IGarageCar } from "../types/garage";
 import { ICar } from "../types/car";
 const dayjs = require('dayjs');
 const Car = require("../models/car");
+const Customer = require("../models/customer");
 const GarageCar = require('../models/garage');
 
 const createGarageCar = async(req: CustomRequest<IGarageCar>, res: Response) => {
@@ -47,16 +48,23 @@ const createGarageCar = async(req: CustomRequest<IGarageCar>, res: Response) => 
 const getGarageCars = async(req: CustomRequest<IGarageCar>, res: Response) => {
   try {
     const garageCars:IGarageCar[] = await GarageCar.find({ status:1 }).sort({_id:-1}).exec();
-    const cars: ICar[] = await Car.find({ status:1 });
+    const cars: ICar[] = await Car.find({ status:1 }).lean();
+    const customers: ICustomer[] = await Customer.find({status:1}).lean();
     // console.log("cars: ",cars)
     return res.status(200).json({
       ok:true,
       cars: garageCars.map((garageCar: IGarageCar) => {
+        console.log("garageCar.checkout: ",garageCar.checkout)
         return {
           id: garageCar._id,
           checkin: garageCar.checkin,
-          checkout: (!garageCar.checkout) ? undefined : garageCar.checkout,
+          checkout: (!garageCar.checkout) ? "" : garageCar.checkout,
           car: cars.find((car: ICar) => car._id.toString() === garageCar.car.toString()),
+          customer: {
+            ...cars.map((car: ICar) => {
+              return customers.find((customer: ICustomer) => customer._id.toString() === car.customer.toString());
+            })[0]
+          },
           hasLeftKeys: garageCar.hasLeftKeys,
           hasPaid: garageCar.hasPaid,
           customprice: garageCar.customprice,

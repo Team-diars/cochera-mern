@@ -71,12 +71,12 @@ export const GarageTable: React.FC = () => {
         options={optionsTable}
         localization={localizationTable}
         columns={[
-        { title: 'Cliente', field: 'fullname', headerStyle, cellStyle},
+        { title: 'Cliente', field: 'customer.fullname', headerStyle, cellStyle},
         { title: 'Placa', field: 'car.licenceplate', type: 'numeric', headerStyle, cellStyle},
         { title: 'Horario Entrada', field: 'checkin', headerStyle, cellStyle},
         { title: 'Horario Salida', field: 'checkout', render: (rowData: GarageCar) => {
-          return <DateFormat position="relative" date={
-            (!rowData.checkout) ? (
+          return (!rowData.checkout) ? (
+            <Tooltip label='Fijar Hora de Salida' bg='gray.300' color='black' hasArrow>
               <Button size="sm" colorScheme="gray">
                 <Icon
                   as={BsFillCalendar2CheckFill}
@@ -84,8 +84,8 @@ export const GarageTable: React.FC = () => {
                   w={[4]}
                 />
               </Button>
+            </Tooltip>
             ) : rowData.checkout
-          }/>
         }, headerStyle, cellStyle},
         { title: 'Acciones', field: 'actions', render: (rowData: GarageCar) => {
             return <Menu isLazy placement="left-start">

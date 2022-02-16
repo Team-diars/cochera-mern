@@ -1,13 +1,13 @@
 const Customer = require("../models/customer");
 import {Request, Response} from 'express'
-import { Customer } from '../types/customer';
+import { ICustomer } from '../types/customer';
 
 const getCustomers = async (req: Request, res: Response) => {
   try {
     const customers = await Customer.find({ status: 1 }).sort({_id:-1}).exec();
     return res.status(200).json({
       ok: true,
-      customers: customers.map((customer: Customer) => {
+      customers: customers.map((customer: ICustomer) => {
         return {
           id: customer._id,
           fullname: customer.fullname,
@@ -30,7 +30,7 @@ const getSingleCustomer = async (req: Request, res: Response) => {
     const customer = await Customer.find({ _id: id, status: 1 }).exec();
     return res.status(200).json({
       ok: true,
-      customers: customer.map((customer: Customer) => {
+      customers: customer.map((customer: ICustomer) => {
         return {
           id: customer._id,
           fullname: customer.fullname, 

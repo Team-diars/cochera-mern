@@ -1,7 +1,7 @@
 const Customer = require("../models/customer");
 const Car = require("../models/car");
 import { Request, Response } from "express";
-import { Customer as ICustomer, CustomRequest } from "../types/customer";
+import { ICustomer, CustomRequest } from "../types/customer";
 import { ICar } from '../types/car'
 
 const getAllCars = async(req: CustomRequest<ICar> , res: Response) => {

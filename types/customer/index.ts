@@ -1,14 +1,14 @@
 import mongoose from 'mongoose'
 import { Request, Response } from 'express';
-import { Car } from '../car';
+import { ICar } from '../car';
 
-export interface Customer extends mongoose.Document{
+export interface ICustomer extends mongoose.Document{
   _id: string,
   fullname: string, 
   cellphone: string,
   address: string,
   status: number,
-  cars: Array<Car>,
+  cars: Array<ICar>,
   date: Date
 }
 
