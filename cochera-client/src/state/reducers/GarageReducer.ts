@@ -22,7 +22,7 @@ const reducer = (state: GarageState = initialState, action: GarageAction) => {
     case ActionGarageType.GET_CARS:
       return {
         ...state,
-        cars: [...action.payload],
+        cars: action.payload,
         loading:false,
         error:null,
       }

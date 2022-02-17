@@ -21,7 +21,7 @@ const reducer = (state: CarState = initialState, action: CarAction) => {
     case ActionCarType.RETRIEVE:
       return {
         ...state,
-        cars: [...action.payload],
+        cars: action.payload,
         loading:false,
         error:null,
       }

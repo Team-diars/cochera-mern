@@ -45,10 +45,6 @@ export const GarageTable: React.FC = () => {
   const dispatch = useDispatch();
   const {contextActions: {setIsOpen, setIdSelected}, contextState: {isOpen: isEditPopupOpen, idSelected}} = useSelectedContext();
 
-  useEffect(() => {
-    const retrieveGarageCars = () => dispatch(getGarageCars());
-    retrieveGarageCars();
-  },[dispatch])
   const removeCustomer = (id: string | null = null): void => {
     if (!id) return;
     dispatch(deleteCustomer(id));
@@ -57,14 +53,16 @@ export const GarageTable: React.FC = () => {
     setIdSelected(id);
     setIsOpen(true);
   }
-  
+  // useEffect(() => {
+  //   if(idSelected){
+  //     const retrieveSingleCustomer = (id: string) => dispatch(getSingleCustomer(id));
+  //     retrieveSingleCustomer(idSelected);
+  //   }
+  // },[idSelected, dispatch])
   useEffect(() => {
-    if(idSelected){
-      const retrieveSingleCustomer = (id: string) => dispatch(getSingleCustomer(id));
-      retrieveSingleCustomer(idSelected);
-    }
-  },[idSelected, dispatch])
-  
+    const retrieveGarageCars = () => dispatch(getGarageCars());
+    retrieveGarageCars();
+  },[dispatch]);
   console.log("data: ",data.cars);
   return ( 
     <MaterialTable 

@@ -66,10 +66,10 @@ export const AddGarageCar: React.FC<CarProps> = ({initialRef, finalRef, isOpen, 
       [e.target.name]: e.target.value
     });
   }
-  useEffect(() => {
-    const getCars = () => dispatch(getAllCars());
-    getCars();
-  },[dispatch])
+  // useEffect(() => {
+  //   const getCars = () => dispatch(getAllCars());
+  //   getCars();
+  // },[dispatch])
   const filteredCars = useMemo(() => 
   state.cars.filter((car: Car) => (typeof formData.car === 'string' && car.licenceplate) && car.licenceplate.toLowerCase().includes(formData.car.toLowerCase())),
   [state.cars, formData.car]);
